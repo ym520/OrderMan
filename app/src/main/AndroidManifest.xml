@@ -39,6 +39,14 @@
             android:screenOrientation="landscape"></activity>
         <activity android:name=".Activity.orderDetail.OrderDetail"
             android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.setting.settingIndex"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.cook.CookManager"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.setting.DeskManager"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
