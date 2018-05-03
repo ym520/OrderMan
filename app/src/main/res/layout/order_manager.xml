@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--头部-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_width="match_parent"
+        android:background="#f0eded"
+        android:layout_height="65dp">
+
+        <ImageButton
+            android:id="@+id/orderManager_imageButton_back"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:background="@mipmap/back"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/orderManager_textView_back"
+            android:text="返回"
+            android:paddingLeft="10dp"
+            android:textSize="21sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/orderManager_button_orderWithDesk"
+                android:text="有桌位订单"
+                android:textSize="15sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="#a4a2a2"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/orderManager_button_orderWithoutDesk"
+                android:text="无桌位订单"
+                android:textSize="15sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="#fff"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/orderManager_EditText_keyword"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:maxLines="1"
+            android:background="@drawable/bg_ordermanager_edittext_search"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/orderManager_ImageView_search"
+            android:gravity="left"
+            android:src="@mipmap/search"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <!--中间-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/bg_ordermanager_linearlayout"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:gravity="center"
+                android:text="待处理"
+                android:background="@drawable/bg_ordemanage_detail_bank"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/orderManager_textView_noDealWith" />
+
+            <TextView
+                android:id="@+id/orderManager_textView_DealWith"
+                android:gravity="center"
+                android:text="已处理"
+                android:background="@drawable/bg_ordemanage_detail_white"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:id="@+id/orderManager_textView_DealWith_all"
+                android:gravity="center"
+                android:text="全部"
+                android:background="@drawable/bg_ordemanage_detail_white"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
+            android:id="@+id/orderManager_PullToRefreshLayout_refresh"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/orderManager_listView_list"
+                android:divider="#dfdfdf"
+                android:dividerHeight="1dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ListView>
+        </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

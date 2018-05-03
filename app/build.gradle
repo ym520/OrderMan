@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "com.colorlife.orderman"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:recyclerview-v7:25.3.0'
+    testCompile 'junit:junit:4.12'
+    //xutils框架
+    compile 'org.xutils:xutils:3.3.36'
+    //fastJson
+    compile 'com.alibaba:fastjson:1.2.31'
+    //动态权限申请工具
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    //刷新
+    compile 'com.jwenfeng.pulltorefresh:library:1.2.7'
+    //提示工具类
+    compile 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
+    //图片选择工具
+    compile 'com.jph.takephoto:takephoto_library:4.0.3'
+}

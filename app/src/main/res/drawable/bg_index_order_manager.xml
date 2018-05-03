@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="2.0px" />
+    <stroke android:color="#fff" android:width="3px"/>
+    <solid android:color="#1296DB" />
+</selector>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--头部-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_width="match_parent"
+        android:background="#f2f1f1"
+        android:layout_height="65dp">
+
+        <ImageButton
+            android:id="@+id/orderDetail_imageButton_back"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:background="@mipmap/back"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/orderDetail_textView_back"
+            android:text="返回"
+            android:paddingLeft="10dp"
+            android:textSize="21sp"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/orderDetail_textView_deskName"
+            android:text="10号桌"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/orderDetail_ImageView_moreMenu"
+            android:gravity="left"
+            android:src="@mipmap/more"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--左侧-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/orderDetail_textView_orderPearsonCount"
+                    android:gravity="left"
+                    android:paddingLeft="20dp"
+                    android:textSize="20sp"
+                    android:text="人数："
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/orderDetail_textView_orderTime"
+                    android:gravity="left"
+                    android:textSize="20sp"
+                    android:text="2018-4-30 11:12:45"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:background="#dddada"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+            <ListView
+                android:id="@+id/orderDetail_listView_CookDetail"
+                android:dividerHeight="1dp"
+                android:divider="#dddada"
+                android:layout_width="match_parent"
+                android:layout_weight="2"
+                android:layout_height="0dp">
+
+            </ListView>
+            <TextView
+                android:background="#dddada"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingLeft="20dp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+                <TextView
+                    android:textSize="20sp"
+                    android:textColor="#877C6B"
+                    android:text="订单来源:商户食堂"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/orderDetail_listView_orderCode"
+                    android:textSize="20sp"
+                    android:textColor="#877C6B"
+                    android:text="订单号:XD522225556566615651551"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+        <!--右侧-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/bg_order_detail_do_order_linearlayout"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="0dp">
+                <TextView
+                    android:layout_gravity="center"
+                    android:textSize="20sp"
+                    android:textColor="#877C6B"
+                    android:text="消费金额"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="¥"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:textColor="#F8B957"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/orderDetail_textView_sellCount"
+                        android:text="200.00"
+                        android:textSize="30sp"
+                        android:textColor="#F8B957"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/orderDetail_button_doOrder"
+                android:layout_gravity="bottom"
+                android:text="结账"
+                android:textColor="#fff"
+                android:background="#F8B957"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

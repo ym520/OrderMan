@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--头部-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_width="match_parent"
+        android:background="#272323"
+        android:layout_height="65dp">
+
+        <ImageButton
+            android:id="@+id/noDeskOrder_imageButton_back"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:background="@mipmap/back_white"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:background="@drawable/bg_order_linearlayout"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:hint="请输入菜名简拼快速点餐"
+                android:textColorHint="#fff"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                android:id="@+id/noDeskOrder_edit_cookName" />
+
+            <ImageView
+                android:id="@+id/noDeskOrder_ImageView_delete"
+                android:src="@mipmap/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/noDeskOrder_cookType_recyclerView"
+        android:background="#272323"
+        android:paddingLeft="75dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </android.support.v7.widget.RecyclerView>
+    <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
+        android:id="@+id/noDeskOrder_PullToRefreshLayout_refresh"
+        android:layout_width="match_parent"
+        android:layout_weight="8"
+        android:layout_height="0dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/noDeskOrder_cook_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+    </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_weight="2"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:background="#AAAAAA"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+            <TextView
+                android:gravity="center"
+                android:text="¥"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/noDeskOrder_textView_sellCount"
+                android:gravity="center"
+                android:text="200.00"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+            <TextView
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/noDeskOrder_textView_order"
+                android:gravity="center"
+                android:text="下单"
+                android:textColor="#fff"
+                android:background="#E6912E"
+                android:textSize="25sp"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:background="@drawable/bg_cook_shopping"
+                android:src="@mipmap/shopping2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/noDeskOrder_textView_cookCountInOrder"
+                android:text="1"
+                android:textColor="#fff"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:background="@drawable/bg_cook_list_textview_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>
