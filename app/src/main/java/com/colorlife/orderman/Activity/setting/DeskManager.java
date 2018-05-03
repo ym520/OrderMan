@@ -1,6 +1,5 @@
 package com.colorlife.orderman.Activity.setting;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import org.xutils.x;
 /**
  * Created by ym on 2018/5/3 0003.
  */
-
 @ContentView(R.layout.desk_manager)
 public class DeskManager extends AppCompatActivity {
 

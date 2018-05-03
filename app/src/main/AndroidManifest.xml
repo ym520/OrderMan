@@ -47,6 +47,9 @@
         <activity android:name=".Activity.setting.DeskManager"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
             android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.setting.UserSetting"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

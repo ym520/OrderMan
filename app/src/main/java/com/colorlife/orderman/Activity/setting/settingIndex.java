@@ -44,4 +44,10 @@ public class settingIndex extends BaseActivity {
         startActivity(intent);
     }
 
+    @Event(R.id.setting_LinearLayout_userSetting)
+    private void intoUserSetting(View view){
+        Intent intent=new Intent(settingIndex.this,UserSetting.class);
+        startActivity(intent);
+    }
+
 }

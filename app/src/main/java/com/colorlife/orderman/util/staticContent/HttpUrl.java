@@ -30,6 +30,8 @@ public class HttpUrl {
     public static String addCookUrl=realUrl+"cook/add";
     public static String uploadImage=realUrl+"file/sigleImgUpload";
     public static String downloadImage=realUrl+"file/imgDownload";
+    public static String userUpdateUrl=realUrl+"user/update";
+    public static String findUserInfoUrl=realUrl+"user/findUserInfo";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)
