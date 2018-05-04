@@ -15,7 +15,7 @@ import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.Activity.order.NoDeskOrder;
 import com.colorlife.orderman.Activity.order.OrderWithDesk;
 import com.colorlife.orderman.Activity.orderManager.OrderManager;
-import com.colorlife.orderman.Activity.setting.settingIndex;
+import com.colorlife.orderman.Activity.setting.SettingIndex;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
@@ -96,7 +96,7 @@ public class IndexActivity extends BaseActivity {
     //进入设置
     @Event(R.id.index_imageView_setting)
     private void intoSetting(View view){
-        Intent intent=new Intent(IndexActivity.this,settingIndex.class);
+        Intent intent=new Intent(IndexActivity.this,SettingIndex.class);
         startActivity(intent);
     }
 

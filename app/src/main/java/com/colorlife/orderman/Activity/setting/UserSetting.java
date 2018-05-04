@@ -117,7 +117,7 @@ public class UserSetting extends AppCompatActivity {
 
     @Event(value = {R.id.userSetting_textView_back,R.id.userSetting_imageButton_back})
     private void doBack(View view){
-        Intent intent=new Intent(UserSetting.this,settingIndex.class);
+        Intent intent=new Intent(UserSetting.this,SettingIndex.class);
         startActivity(intent);
         finish();
     }

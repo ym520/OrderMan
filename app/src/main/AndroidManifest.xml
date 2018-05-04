@@ -39,7 +39,7 @@
             android:screenOrientation="landscape"></activity>
         <activity android:name=".Activity.orderDetail.OrderDetail"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".Activity.setting.settingIndex"
+        <activity android:name=".Activity.setting.SettingIndex"
             android:screenOrientation="landscape"></activity>
         <activity android:name=".Activity.cook.CookManager"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
@@ -49,7 +49,8 @@
         <activity android:name=".Activity.setting.UserSetting"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".Activity.desk.addDesk"
+        <activity android:name=".Activity.desk.AddDesk"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
             android:screenOrientation="landscape"></activity>
     </application>
 

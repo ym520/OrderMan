@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.colorlife.orderman.Activity.base.BaseActivity;
-import com.colorlife.orderman.Activity.setting.settingIndex;
 import com.colorlife.orderman.R;
 
 import org.xutils.view.annotation.ContentView;
@@ -16,7 +15,7 @@ import org.xutils.view.annotation.ViewInject;
  * Created by ym on 2018/5/4.
  */
 @ContentView(R.layout.add_desk)
-public class addDesk extends BaseActivity {
+public class AddDesk extends BaseActivity {
     //可住人数
     @ViewInject(R.id.addDesk_editText_volume)
     private EditText volume;
@@ -27,7 +26,7 @@ public class addDesk extends BaseActivity {
 
     @Event(R.id.addDesk_textView_back)
     private void doBack(View view){
-        Intent intent=new Intent(addDesk.this, settingIndex.class);
+        Intent intent=new Intent(AddDesk.this, DeskManager.class);
         startActivity(intent);
         finish();
     }

@@ -19,7 +19,7 @@ import org.xutils.view.annotation.ViewInject;
  */
 
 @ContentView(R.layout.setting_index)
-public class settingIndex extends BaseActivity {
+public class SettingIndex extends BaseActivity {
 
     @ViewInject(R.id.setting_LinearLayout_cashSetting)
     private LinearLayout cash;
@@ -36,25 +36,25 @@ public class settingIndex extends BaseActivity {
 
     @Event(R.id.setting_LinearLayout_deskManager)
     private void intoDeskManager(View view){
-        Intent intent=new Intent(settingIndex.this,DeskManager.class);
+        Intent intent=new Intent(SettingIndex.this,DeskManager.class);
         startActivity(intent);
     }
 
     @Event(R.id.setting_LinearLayout_cookManager)
     private void intoCookManager(View view){
-        Intent intent=new Intent(settingIndex.this, CookManager.class);
+        Intent intent=new Intent(SettingIndex.this, CookManager.class);
         startActivity(intent);
     }
 
     @Event(R.id.setting_LinearLayout_userSetting)
     private void intoUserSetting(View view){
-        Intent intent=new Intent(settingIndex.this,UserSetting.class);
+        Intent intent=new Intent(SettingIndex.this,UserSetting.class);
         startActivity(intent);
     }
 
     @Event(value ={R.id.setting_imageButton_back,R.id.setting_textView_back})
     private void doBack(View view){
-        Intent intent=new Intent(settingIndex.this, IndexActivity.class);
+        Intent intent=new Intent(SettingIndex.this, IndexActivity.class);
         startActivity(intent);
         finish();
     }
