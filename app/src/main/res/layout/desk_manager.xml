@@ -4,5 +4,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--头部-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_width="match_parent"
+        android:background="#272323"
+        android:layout_height="65dp">
+
+        <ImageButton
+            android:id="@+id/deskManager_imageButton_back"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:background="@mipmap/back_white"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="桌位管理"
+            android:textColor="#fff"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/deskManager_imageButton_add"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_gravity="center"
+            android:src="@mipmap/add"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/deskManager_room_recyclerView"
+        android:background="#272323"
+        android:paddingLeft="75dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </android.support.v7.widget.RecyclerView>
+    <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
+        android:id="@+id/deskManager_PullToRefreshLayout_refresh"
+        android:layout_width="match_parent"
+        android:layout_weight="8"
+        android:layout_height="0dp">
+        <ListView
+            android:id="@+id/deskManager_cookType_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+    </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
+
 
 </LinearLayout>

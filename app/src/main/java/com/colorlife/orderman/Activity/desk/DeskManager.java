@@ -1,8 +1,8 @@
-package com.colorlife.orderman.Activity.setting;
+package com.colorlife.orderman.Activity.desk;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.colorlife.orderman.Activity.base.ActivityCollector;
 import com.colorlife.orderman.R;
@@ -15,10 +15,12 @@ import org.xutils.x;
  */
 @ContentView(R.layout.desk_manager)
 public class DeskManager extends AppCompatActivity {
+    private String TAG=this.toString();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
         x.view().inject(this);
         ActivityCollector.addActivity(this);
     }

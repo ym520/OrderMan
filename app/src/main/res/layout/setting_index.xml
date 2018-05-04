@@ -16,13 +16,13 @@
         android:layout_height="50dp">
 
         <ImageButton
-            android:id="@+id/addCook_imageButton_back"
+            android:id="@+id/setting_imageButton_back"
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:background="@mipmap/back_white"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/addCook_textView_back"
+            android:id="@+id/setting_textView_back"
             android:text="返回"
             android:textColor="#fff"
             android:paddingLeft="10dp"

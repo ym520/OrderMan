@@ -6,6 +6,8 @@ import android.widget.LinearLayout;
 
 import com.colorlife.orderman.Activity.base.BaseActivity;
 import com.colorlife.orderman.Activity.cook.CookManager;
+import com.colorlife.orderman.Activity.desk.DeskManager;
+import com.colorlife.orderman.Activity.main.IndexActivity;
 import com.colorlife.orderman.R;
 
 import org.xutils.view.annotation.ContentView;
@@ -33,7 +35,7 @@ public class settingIndex extends BaseActivity {
     private LinearLayout version;
 
     @Event(R.id.setting_LinearLayout_deskManager)
-    private void intoDeskManager(){
+    private void intoDeskManager(View view){
         Intent intent=new Intent(settingIndex.this,DeskManager.class);
         startActivity(intent);
     }
@@ -48,6 +50,13 @@ public class settingIndex extends BaseActivity {
     private void intoUserSetting(View view){
         Intent intent=new Intent(settingIndex.this,UserSetting.class);
         startActivity(intent);
+    }
+
+    @Event(value ={R.id.setting_imageButton_back,R.id.setting_textView_back})
+    private void doBack(View view){
+        Intent intent=new Intent(settingIndex.this, IndexActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

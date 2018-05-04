@@ -44,11 +44,12 @@
         <activity android:name=".Activity.cook.CookManager"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".Activity.setting.DeskManager"
-            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+        <activity android:name=".Activity.desk.DeskManager"
             android:screenOrientation="landscape"></activity>
         <activity android:name=".Activity.setting.UserSetting"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.desk.addDesk"
             android:screenOrientation="landscape"></activity>
     </application>
 
