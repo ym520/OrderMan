@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
-import com.colorlife.orderman.Activity.cook.AddCook;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.UserRequest;
 import com.colorlife.orderman.util.ViewUtil;
@@ -47,7 +46,7 @@ public class UserSetting extends AppCompatActivity {
     @ViewInject(R.id.userSetting_TextView_name)
     private TextView name;
     @ViewInject(R.id.userSetting_textView_finish)
-    private TextView finsh;
+    private TextView finish;
 
     private UserRequest userRequest=new UserRequest();
 
@@ -125,6 +124,7 @@ public class UserSetting extends AppCompatActivity {
 
     @Event(R.id.userSetting_textView_finish)
     private void doUpdate(View view){
+        Log.d(TAG, "doUpdate: 提交点击事件");
         userRequest.setCity(city.getText().toString());
         userRequest.setProvince(province.getText().toString());
         userRequest.setStoreName(storeName.getText().toString());
