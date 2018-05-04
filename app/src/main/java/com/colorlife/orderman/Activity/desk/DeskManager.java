@@ -40,11 +40,6 @@ public class DeskManager extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    @Event(R.id.deskManager_imageButton_add)
-    private void intoAddCook(View view){
-        Intent intent=new Intent(DeskManager.this, AddCook.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onDestroy() {
