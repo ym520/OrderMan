@@ -111,7 +111,7 @@ public class NoDeskOrder extends AppCompatActivity {
 
         StaggeredGridLayoutManager layoutManager2=new StaggeredGridLayoutManager(8,StaggeredGridLayoutManager.VERTICAL);
         cookRecyclerView.setLayoutManager(layoutManager2);
-        cookAdapter=new CookAdapter(cookList,OrderCount,wantOrderCookList);
+        cookAdapter=new CookAdapter(cookList,OrderCount,wantOrderCookList,priceCount);
         cookRecyclerView.setAdapter(cookAdapter);
 
         initCookTypeData();

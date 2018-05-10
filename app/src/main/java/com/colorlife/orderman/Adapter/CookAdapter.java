@@ -17,6 +17,7 @@ import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ import java.util.List;
 public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
     private OnItemClickListener onItemClickListener;
     private TextView orderCount;
+    private TextView priceCount;
     List<CookRequest> cookRequestList;
     //点菜的列表单子
     private List<OrderDetailRequest> OrderCookList;
@@ -46,10 +48,11 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
             orderCount=textView;
         }
     }
-    public CookAdapter(List<CookRequest> requests,TextView textView,List<OrderDetailRequest> list){
+    public CookAdapter(List<CookRequest> requests,TextView textView,List<OrderDetailRequest> list,TextView priceCount){
         this.cookRequestList=requests;
         this.orderCount=textView;
         this.OrderCookList=list;
+        this.priceCount=priceCount;
     }
 
     //更新数据
@@ -84,7 +87,8 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
         final CookRequest cookRequest=cookRequestList.get(position);
         //Log.d(this.toString(), "onBindViewHolder:  Name:"+cookRequest.getName()+" ImageUrl:"+cookRequest.getImageUrl());
         holder.cookName.setText(cookRequest.getName());
-        holder.cookPrice.setText(cookRequest.getPrice()+"/每份");
+        DecimalFormat df = new DecimalFormat("#.00");
+        holder.cookPrice.setText(df.format(cookRequest.getPrice())+"/每份");
         if (cookRequest.getImageUrl()!=null && !"".equals(cookRequest.getImageUrl())){
             if (cookRequest.getImageUrl().contains("http")){
                 x.image().bind(holder.CookImg, cookRequest.getImageUrl(),getImageOptions());
@@ -118,13 +122,24 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
                 request.setStatus(1);
                 request.setId(0);
                 request.setTasteId(0);
-
+                //去掉重复的菜品，把数量更新
                 if (OrderCookList.contains(request)){
                     OrderCookList.remove(request);
                     OrderCookList.add(request);
                 }else {
                     OrderCookList.add(request);
                 }
+
+                if (OrderCookList.size()>0){
+                    Double saleCount=0.00;
+                    for (OrderDetailRequest d:OrderCookList){
+                        saleCount=saleCount+d.getCount()*d.getPrice();
+                    }
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    priceCount.setText(df.format(saleCount));
+                }
+
+
             }
         });
 

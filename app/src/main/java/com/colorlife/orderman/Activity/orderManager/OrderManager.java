@@ -169,7 +169,7 @@ public class OrderManager extends AppCompatActivity {
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.d(TAG, "onError: "+ex.getMessage().toString());
                 if (ex.getMessage()!=null && !"".equals(ex.getMessage())){
-                    if (ex.getMessage().contains("failed to connect")/*||ex.getMessage().contains("isConnected failed: EHOSTUNREACH")*/){
+                    if (ex.getMessage().contains("failed to connect")){
                         ViewUtil.showToast(OrderManager.this,"网络连接有问题，请您切换到流畅网络。");
                     }
                 }
@@ -254,29 +254,7 @@ public class OrderManager extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        orderListVos.clear();
         ActivityCollector.removeActivity(this);
     }
-//
-//    @Override
-//    public void onScrollStateChanged(AbsListView absListView, int i) {
-//        if ((i == AbsListView.OnScrollListener.SCROLL_STATE_IDLE ) && (absListView.getLastVisiblePosition()== total_index)) {
-//            Log.d(TAG, "onScrollStateChanged: 页末，进行数据加载");
-//            isLoading=true;
-//            loadMoreView.setVisibility(View.VISIBLE);
-//            pn++;
-//            initData(pn,status,type,keyword);
-//        }
-//    }
-//
-//    @Override
-//    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-//        last_index=i+i1;
-//        total_index=i2;
-//    }
-
-
-   /* @Event(value={R.id.orderManager_listView_list},type = View.OnScrollChangeListener.class)
-    private void doQueryOnScroll(View view){
-        onscroll
-    }*/
 }

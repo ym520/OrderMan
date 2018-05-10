@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.colorlife.orderman.R;
@@ -20,10 +21,12 @@ public class DeskListAdapter extends RecyclerView.Adapter<DeskListAdapter.ViewHo
     private List<DeskList> deskLists;
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView deskName;
+        ImageView deskImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             deskName= (TextView) itemView.findViewById(R.id.desk_textView_deskName);
+            deskImage= (ImageView) itemView.findViewById(R.id.desk_textView_image);
         }
     }
     public DeskListAdapter(List<DeskList> deskLists){
@@ -55,6 +58,9 @@ public class DeskListAdapter extends RecyclerView.Adapter<DeskListAdapter.ViewHo
     public void onBindViewHolder(DeskListAdapter.ViewHolder holder, int position) {
         DeskList deskList=deskLists.get(position);
         holder.deskName.setText(deskList.getCode()+"");
+        if (deskList.getStatus()==2){
+            holder.deskImage.setImageResource(R.mipmap.desk_using);
+        }
     }
 
     @Override

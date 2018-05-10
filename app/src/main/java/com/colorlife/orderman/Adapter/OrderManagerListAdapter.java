@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.OrderListVo;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  */
 
 public class OrderManagerListAdapter extends ArrayAdapter<OrderListVo> {
-
+    private DecimalFormat df = new DecimalFormat("#.00");
     private int resourceId;
     public OrderManagerListAdapter(Context context, int resource, List<OrderListVo> objects) {
         super(context, resource, objects);
@@ -41,7 +42,7 @@ public class OrderManagerListAdapter extends ArrayAdapter<OrderListVo> {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         viewHolder.remark.setText(orderListVo.getRemark());
-        viewHolder.saleTotal.setText(orderListVo.getSaleTotal() + "");
+        viewHolder.saleTotal.setText(df.format(orderListVo.getSaleTotal()));
         if (orderListVo.getStatus()==1){
             viewHolder.status.setText("已下单，未结账");
         }else if (orderListVo.getStatus()==2){

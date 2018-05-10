@@ -94,10 +94,12 @@
 
     <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
         android:id="@+id/order_PullToRefreshLayout_refresh"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
+            android:gravity="center"
             android:id="@+id/order_recyclerView_desk"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

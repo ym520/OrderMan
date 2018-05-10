@@ -28,6 +28,7 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,7 +99,8 @@ public class OrderDetail extends AppCompatActivity {
                     //桌子名称
                     deskName.setText(orderRequest.getDeskName());
                     //总价
-                    sellPriceCount.setText(orderRequest.getSaleTotal().toString());
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    sellPriceCount.setText(df.format(orderRequest.getSaleTotal()));
                     //订单号
                     orderCode.setText("订单号:"+orderRequest.getNumber());
                     //设置下单时间

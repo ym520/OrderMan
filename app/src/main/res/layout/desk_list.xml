@@ -4,17 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="120dp">
 
-    <TextView
-        android:background="@mipmap/desk"
+    <ImageView
+        android:id="@+id/desk_textView_image"
+        android:src="@mipmap/desk_no_user"
         android:gravity="center"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_width="130dp"
+        android:layout_height="120dp" />
+
     <TextView
         android:id="@+id/desk_textView_deskName"
         android:text="11桌"
-        android:textSize="20sp"
-        android:textColor="#fff"
+        android:textSize="16sp"
+        android:typeface="sans"
+        android:textColor="#f5f2f2"
         android:gravity="center"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_width="130dp"
+        android:layout_height="120dp" />
 </FrameLayout>

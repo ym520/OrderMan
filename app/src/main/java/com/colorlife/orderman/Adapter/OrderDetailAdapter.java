@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.OrderDetailRequest;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class OrderDetailAdapter extends ArrayAdapter<OrderDetailRequest> {
     private int resourceID;
-
+    private DecimalFormat df = new DecimalFormat("#.00");
     public OrderDetailAdapter(Context context, int resource, List<OrderDetailRequest> objects) {
         super(context, resource, objects);
         this.resourceID=resource;
@@ -38,7 +39,7 @@ public class OrderDetailAdapter extends ArrayAdapter<OrderDetailRequest> {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         viewHolder.CookName.setText(detailRequest.getCookName());
-        viewHolder.MenuPriceAndCount.setText(detailRequest.getPrice()+" x "+detailRequest.getCount());
+        viewHolder.MenuPriceAndCount.setText(df.format(detailRequest.getPrice())+" x "+detailRequest.getCount());
         return convertView;
     };
 
