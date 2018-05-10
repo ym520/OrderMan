@@ -122,8 +122,9 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
                 if (OrderCookList.contains(request)){
                     OrderCookList.remove(request);
                     OrderCookList.add(request);
+                }else {
+                    OrderCookList.add(request);
                 }
-                OrderCookList.add(request);
             }
         });
 

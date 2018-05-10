@@ -165,20 +165,8 @@ public class NoDeskOrder extends AppCompatActivity {
         request.setType(1);
         request.setSaleTotal(Double.valueOf(priceCount.getText().toString()));
         request.setOrderDetailRequests(wantOrderCookList);
-        int id=doCreateOrder(request);;
-
-        if (id>0){
-            //跳转
-            Intent intent=new Intent(NoDeskOrder.this, OrderDetail.class);
-            //绑定数据
-            intent.putExtra("orderId",id);
-            startActivity(intent);
-        }else {
-
-        }
-
+        doCreateOrder(request);;
     }
-
 
     //初始化菜单数据
     public void initCookData() {
@@ -340,6 +328,11 @@ public class NoDeskOrder extends AppCompatActivity {
                     ViewUtil.showToast(NoDeskOrder.this,msg);
                     if (orderID!=null && !"".equals(orderID)){
                         orderId[0] =Integer.valueOf(orderID);
+                        //跳转
+                        Intent intent=new Intent(NoDeskOrder.this, OrderDetail.class);
+                        //绑定数据
+                        intent.putExtra("orderId",orderId[0]);
+                        startActivity(intent);
                     }
                 }else {
                     ViewUtil.showToast(NoDeskOrder.this,msg);

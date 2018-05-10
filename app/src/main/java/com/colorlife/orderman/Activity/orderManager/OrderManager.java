@@ -114,7 +114,7 @@ public class OrderManager extends AppCompatActivity {
                 OrderListVo listVo=orderListVos.get(i);
                 Log.d(TAG, "onItemClick: orderId="+listVo.getId());
                 Intent intent=new Intent(OrderManager.this, OrderDetail.class);
-                intent.putExtra("orderId",listVo.getId()+"");
+                intent.putExtra("orderId",listVo.getId());
                 startActivity(intent);
             }
         });

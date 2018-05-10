@@ -73,10 +73,10 @@ public class OrderDetail extends AppCompatActivity {
         orderDetail.setAdapter(adapter);
 
         //从前一个页面获取的数据（id），进行数据查询
-        String orderId=getIntent().getStringExtra("orderId");
-        if (orderId!=null){
+        id=getIntent().getIntExtra("orderId",0);
+       /* if (orderId!=null){
             id=Integer.valueOf(orderId);
-        }
+        }*/
         initData(id);
     }
 

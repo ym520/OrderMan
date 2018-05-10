@@ -139,7 +139,7 @@ public class OrderDetailRequest {
     public boolean equals(Object obj) {
         if (obj instanceof OrderDetailRequest){
             OrderDetailRequest request= (OrderDetailRequest) obj;
-            return this.cookId.equals(request.cookId) && this.count.equals(request.count);
+            return this.cookId==request.cookId;
         }
         return super.equals(obj);
     }

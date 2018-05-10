@@ -38,7 +38,7 @@ public class OrderDetailAdapter extends ArrayAdapter<OrderDetailRequest> {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         viewHolder.CookName.setText(detailRequest.getCookName());
-        viewHolder.MenuPriceAndCount.setText(detailRequest.getPrice()+"x"+detailRequest.getCount());
+        viewHolder.MenuPriceAndCount.setText(detailRequest.getPrice()+" x "+detailRequest.getCount());
         return convertView;
     };
 
