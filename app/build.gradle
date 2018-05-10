@@ -37,7 +37,7 @@ dependencies {
     //刷新
     compile 'com.jwenfeng.pulltorefresh:library:1.2.7'
     //提示工具类
-    compile 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
+    compile 'com.dou361.dialogui:jjdxm-dialogui:1.0.1'
     //图片选择工具
     compile 'com.jph.takephoto:takephoto_library:4.0.3'
 }

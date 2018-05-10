@@ -16,12 +16,18 @@ import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
 import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.Activity.main.IndexActivity;
+import com.colorlife.orderman.Activity.orderDetail.OrderDetail;
+import com.colorlife.orderman.Activity.orderManager.OrderManager;
 import com.colorlife.orderman.Adapter.DeskListAdapter;
+import com.colorlife.orderman.Listener.OnItemClickListener;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.DeskList;
+import com.colorlife.orderman.domain.OrderRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
+import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.listener.DialogUIListener;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 
@@ -35,6 +41,8 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by ym on 2018/4/21.
@@ -71,7 +79,9 @@ public class OrderWithDesk extends AppCompatActivity {
 
 
     private DeskListAdapter adapter;
-
+    private OrderRequest order;
+    private DeskList deskList;
+    private Intent intent;
     //当前页
     private Integer pn=1;
     //状态
@@ -84,11 +94,51 @@ public class OrderWithDesk extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
         ActivityCollector.addActivity(this);
+        DialogUIUtils.init(OrderWithDesk.this);
         StaggeredGridLayoutManager layoutManager=new StaggeredGridLayoutManager(6,StaggeredGridLayoutManager.VERTICAL);
         deskListView.setLayoutManager(layoutManager);
-        adapter=new DeskListAdapter(deskLists);
+        adapter=new DeskListAdapter(deskLists,OrderWithDesk.this);
         deskListView.setAdapter(adapter);
         initDesk(pn,status);
+        /*adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.d(TAG, "onClick: ");
+                if (view.getId()==R.id.desk_textView_image){
+                    Log.d(TAG, "onClick: ");
+                    deskList=deskLists.get(position);
+                    if (deskList.getStatus()==1){
+                        order = new OrderRequest();
+                        DialogUIUtils.showAlertInput(OrderWithDesk.this, "开台  " + deskList.getCode(), null, "人数", "取消", "确定", true, false, new DialogUIListener() {
+                            @Override
+                            public void onPositive() {
+                                //取消
+
+                            }
+                            @Override
+                            public void onNegative() {
+                                //确定
+                                order.setDeskId(deskList.getId());
+                                order.setDeskName(deskList.getCode());
+                                intent = new Intent(OrderWithDesk.this, NoDeskOrder.class);
+                                intent.putExtra("order", order);
+                                startActivity(intent);
+                            }
+                            @Override
+                            public void onGetInput(CharSequence input1, CharSequence input2) {
+                                order.setPersonCount(Integer.valueOf(input2.toString()));
+                            }
+                        }).show();
+                    }else if (deskList.getStatus()==2){
+                        Intent intent=new Intent(OrderWithDesk.this, OrderDetail.class);
+                        //查询当前的桌位被占用的订单
+                        intent.putExtra("orderId",1);
+                        startActivity(intent);
+                    }
+
+                }
+            }
+        });*/
 
         refresh.setRefreshListener(new BaseRefreshListener() {
             @Override

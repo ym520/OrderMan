@@ -1,12 +1,15 @@
 package com.colorlife.orderman.domain;
 
+import android.content.Intent;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by ym on 2018/4/30.
  */
 
-public class OrderRequest {
+public class OrderRequest implements Serializable {
     private Integer id;
     //订单号
     private String number;
@@ -32,8 +35,18 @@ public class OrderRequest {
     private String remark;
     //用户id
     private Integer userId;
+    //用餐总人数
+    private Integer personCount;
     //订单详情
     private List<OrderDetailRequest> orderDetailRequests;
+
+    public Integer getPersonCount() {
+        return personCount;
+    }
+
+    public void setPersonCount(Integer personCount) {
+        this.personCount = personCount;
+    }
 
     public Integer getId() {
         return id;

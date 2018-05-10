@@ -2,6 +2,8 @@ package com.colorlife.orderman.Application;
 
 import android.app.Application;
 
+import com.dou361.dialogui.DialogUIUtils;
+
 import org.xutils.x;
 
 /**

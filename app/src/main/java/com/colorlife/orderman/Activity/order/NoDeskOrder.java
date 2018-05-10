@@ -87,7 +87,7 @@ public class NoDeskOrder extends AppCompatActivity {
     private List<CookRequest> cookList=new ArrayList<>();
 
     private List<OrderDetailRequest> wantOrderCookList=new ArrayList<>();
-
+    private OrderRequest request;
     private CookTypeAdapter cookTypeAdapter;
     private CookAdapter cookAdapter;
 
@@ -116,7 +116,10 @@ public class NoDeskOrder extends AppCompatActivity {
 
         initCookTypeData();
         initCookData();
-
+        request= (OrderRequest) getIntent().getSerializableExtra("order");
+        if (request==null){
+            request=new OrderRequest();
+        }
         //刷新相关
         refresh.setRefreshListener(new BaseRefreshListener() {
             //下拉刷新
@@ -154,8 +157,6 @@ public class NoDeskOrder extends AppCompatActivity {
     //下单
     @Event(R.id.noDeskOrder_textView_order)
     private void doOrder(View view){
-        //获取数据
-        OrderRequest request=new OrderRequest();
         request.setStatus(1);
         request.setDeskName("无桌位");
         request.setDeskId(0);
