@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.orderDetail;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -72,10 +73,11 @@ public class OrderDetail extends AppCompatActivity {
         orderDetail.setAdapter(adapter);
 
         //从前一个页面获取的数据（id），进行数据查询
+        String orderId=getIntent().getStringExtra("orderId");
+        if (orderId!=null){
+            id=Integer.valueOf(orderId);
+        }
         initData(id);
-
-
-
     }
 
     private void initData(Integer id) {
@@ -98,7 +100,7 @@ public class OrderDetail extends AppCompatActivity {
                     //总价
                     sellPriceCount.setText(orderRequest.getSaleTotal().toString());
                     //订单号
-                    orderCode.setText(orderRequest.getNumber());
+                    orderCode.setText("订单号:"+orderRequest.getNumber());
                     //设置下单时间
                     orderTime.setText(orderRequest.getCreateTime());
 
@@ -128,6 +130,11 @@ public class OrderDetail extends AppCompatActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.d(TAG, "onError: "+ex.getMessage().toString());
+                if (ex.getMessage()!=null && !"".equals(ex.getMessage())){
+                    if (ex.getMessage().contains("failed to connect")){
+                        ViewUtil.showToast(OrderDetail.this,"网络连接有问题，请您切换到流畅网络。");
+                    }
+                }
                 if (ex instanceof HttpException) { // 网络错误
                     HttpException httpEx = (HttpException) ex;
                     int responseCode = httpEx.getCode();

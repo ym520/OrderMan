@@ -18,7 +18,7 @@ public class HttpUrl {
     //宿舍：192.168.1.106
     //服务器：59.110.141.1
 
-    public static String realUrl="http://111.230.246.68:8080/orderMan/";
+    public static String realUrl="http://172.20.10.2:8080/orderMan/";
     public static String loginUrl=realUrl+"user/login";
     public static String registerUrl=realUrl+"user/register";
     public static String User_exit_Url=realUrl+"user/logout";
@@ -32,6 +32,7 @@ public class HttpUrl {
     public static String downloadImage=realUrl+"file/imgDownload?subFilePath=";
     public static String userUpdateUrl=realUrl+"user/update";
     public static String findUserInfoUrl=realUrl+"user/findUserInfo";
+    public static String addOrderUrl=realUrl+"order/add";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)

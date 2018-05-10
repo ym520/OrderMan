@@ -1,11 +1,13 @@
 package com.colorlife.orderman.Activity.orderManager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,9 +16,11 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.orderDetail.OrderDetail;
 import com.colorlife.orderman.Adapter.OrderManagerListAdapter;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.OrderListVo;
+import com.colorlife.orderman.domain.OrderRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
@@ -100,6 +104,18 @@ public class OrderManager extends AppCompatActivity {
                 pn++;
                 initData(pn,status,type,keyword);
                 refresh.finishLoadMore();
+            }
+        });
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //获取列表数据
+                OrderListVo listVo=orderListVos.get(i);
+                Log.d(TAG, "onItemClick: orderId="+listVo.getId());
+                Intent intent=new Intent(OrderManager.this, OrderDetail.class);
+                intent.putExtra("orderId",listVo.getId()+"");
+                startActivity(intent);
             }
         });
     }

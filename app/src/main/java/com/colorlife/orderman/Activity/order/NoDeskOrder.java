@@ -2,6 +2,7 @@ package com.colorlife.orderman.Activity.order;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.gesture.GestureUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.cook.AddCook;
 import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.Activity.orderDetail.OrderDetail;
 import com.colorlife.orderman.Adapter.CookAdapter;
@@ -24,6 +26,8 @@ import com.colorlife.orderman.Listener.OnItemClickListener;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.CookRequest;
 import com.colorlife.orderman.domain.CookTypeList;
+import com.colorlife.orderman.domain.OrderDetailRequest;
+import com.colorlife.orderman.domain.OrderRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
@@ -82,6 +86,8 @@ public class NoDeskOrder extends AppCompatActivity {
     private List<CookTypeList> cookTypeList=new ArrayList<>();
     private List<CookRequest> cookList=new ArrayList<>();
 
+    private List<OrderDetailRequest> wantOrderCookList=new ArrayList<>();
+
     private CookTypeAdapter cookTypeAdapter;
     private CookAdapter cookAdapter;
 
@@ -105,7 +111,7 @@ public class NoDeskOrder extends AppCompatActivity {
 
         StaggeredGridLayoutManager layoutManager2=new StaggeredGridLayoutManager(8,StaggeredGridLayoutManager.VERTICAL);
         cookRecyclerView.setLayoutManager(layoutManager2);
-        cookAdapter=new CookAdapter(cookList);
+        cookAdapter=new CookAdapter(cookList,OrderCount,wantOrderCookList);
         cookRecyclerView.setAdapter(cookAdapter);
 
         initCookTypeData();
@@ -149,11 +155,28 @@ public class NoDeskOrder extends AppCompatActivity {
     @Event(R.id.noDeskOrder_textView_order)
     private void doOrder(View view){
         //获取数据
+        OrderRequest request=new OrderRequest();
+        request.setStatus(1);
+        request.setDeskName("无桌位");
+        request.setDeskId(0);
+        request.setNumber(System.currentTimeMillis()+"");
+        request.setId(0);
+        request.setUserId(0);
+        request.setType(1);
+        request.setSaleTotal(Double.valueOf(priceCount.getText().toString()));
+        request.setOrderDetailRequests(wantOrderCookList);
+        int id=doCreateOrder(request);;
 
-        //跳转
-        Intent intent=new Intent(NoDeskOrder.this, OrderDetail.class);
-        //绑定数据
-        startActivity(intent);
+        if (id>0){
+            //跳转
+            Intent intent=new Intent(NoDeskOrder.this, OrderDetail.class);
+            //绑定数据
+            intent.putExtra("orderId",id);
+            startActivity(intent);
+        }else {
+
+        }
+
     }
 
 
@@ -295,6 +318,62 @@ public class NoDeskOrder extends AppCompatActivity {
         Intent intent=new Intent(this,LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public int doCreateOrder(final OrderRequest orderRequest){
+        RequestParams params=new RequestParams(HttpUrl.addOrderUrl);
+        params.setAsJsonContent(true);
+        //获取cookie
+        SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
+        String cookie=sp2.getString("JSESSIONID","");
+        params.addHeader("Cookie","JSESSIONID="+cookie);
+        params.setBodyContent(JSON.toJSONString(orderRequest));
+        final int[] orderId = new int[1];
+
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                String code= JSON.parseObject(result).getString("code");
+                String msg=JSON.parseObject(result).getString("msg");
+                String orderID=JSON.parseObject(result).getString("data");
+                if (code.equals("10000")){
+                    ViewUtil.showToast(NoDeskOrder.this,msg);
+                    if (orderID!=null && !"".equals(orderID)){
+                        orderId[0] =Integer.valueOf(orderID);
+                    }
+                }else {
+                    ViewUtil.showToast(NoDeskOrder.this,msg);
+                    if (msg.equals("你当前没有登录！没有该权限")){
+                        StatusUtil.isLogin=false;
+                    }
+                }
+            }
+            @Override
+            public void onFinished() {
+                Log.d(TAG, "onFinished: 请求完成！");
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.d(TAG, "onError: "+ex.getMessage());
+                if (ex instanceof HttpException) { // 网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                    Log.d(TAG, "onError: responseCode:"+responseCode);
+                    Log.d(TAG, "onError: responseMsg:"+responseMsg);
+                    Log.d(TAG, "onError: errorResult:"+errorResult);
+                } else { // 其他错误
+                    // ...
+                }
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Log.d(TAG, "onCancelled: "+cex.getMessage().toString());
+            }
+        });
+
+        return orderId[0];
     }
 
     @Override

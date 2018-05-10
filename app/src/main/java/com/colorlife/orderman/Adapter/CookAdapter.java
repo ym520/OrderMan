@@ -1,15 +1,16 @@
 package com.colorlife.orderman.Adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.colorlife.orderman.Listener.OnItemClickListener;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.CookRequest;
+import com.colorlife.orderman.domain.OrderDetailRequest;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 
 import org.xutils.common.util.DensityUtil;
@@ -23,7 +24,11 @@ import java.util.List;
  */
 
 public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
+    private OnItemClickListener onItemClickListener;
+    private TextView orderCount;
     List<CookRequest> cookRequestList;
+    //点菜的列表单子
+    private List<OrderDetailRequest> OrderCookList;
     ImageOptions imageOptions;
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -31,16 +36,20 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
         public TextView cookPrice;
         public TextView cookSelectCount;
         public ImageView CookImg;
-        public ViewHolder(View view){
+        public TextView orderCount;
+        public ViewHolder(View view,TextView textView){
             super(view);
             cookName= (TextView) view.findViewById(R.id.cook_textView_name);
             cookPrice= (TextView) view.findViewById(R.id.cook_textView_price);
             cookSelectCount= (TextView) view.findViewById(R.id.cook_textView_select_count);
             CookImg= (ImageView) view.findViewById(R.id.cook_list_img);
+            orderCount=textView;
         }
     }
-    public CookAdapter(List<CookRequest> requests){
+    public CookAdapter(List<CookRequest> requests,TextView textView,List<OrderDetailRequest> list){
         this.cookRequestList=requests;
+        this.orderCount=textView;
+        this.OrderCookList=list;
     }
 
     //更新数据
@@ -59,26 +68,64 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
         }
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cook_list,parent,false);
-        CookAdapter.ViewHolder viewHolder=new ViewHolder(view);
+        CookAdapter.ViewHolder viewHolder=new ViewHolder(view,this.orderCount);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        CookRequest cookRequest=cookRequestList.get(position);
-        Log.d(this.toString(), "onBindViewHolder: "+cookRequest.getName());
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final CookRequest cookRequest=cookRequestList.get(position);
+        //Log.d(this.toString(), "onBindViewHolder:  Name:"+cookRequest.getName()+" ImageUrl:"+cookRequest.getImageUrl());
         holder.cookName.setText(cookRequest.getName());
         holder.cookPrice.setText(cookRequest.getPrice()+"/每份");
         if (cookRequest.getImageUrl()!=null && !"".equals(cookRequest.getImageUrl())){
             if (cookRequest.getImageUrl().contains("http")){
                 x.image().bind(holder.CookImg, cookRequest.getImageUrl(),getImageOptions());
             }else {
-                x.image().bind(holder.CookImg, HttpUrl.downloadImage+cookRequest.getImageUrl(),getImageOptions());
+                //Log.d(this.toString(), "onBindViewHolder: "+HttpUrl.downloadImage+cookRequest.getImageUrl());
+                x.image().bind(holder.CookImg, HttpUrl.downloadImage+cookRequest.getImageUrl().replaceAll("\\\\","%5C"),getImageOptions());
             }
         }
+        holder.cookSelectCount.setText(0+"");
+        holder.cookSelectCount.setVisibility(View.INVISIBLE);
+        holder.orderCount.setText(0+"");
+        holder.orderCount.setVisibility(View.INVISIBLE);
+        holder.CookImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Log.d(this.toString(), "onClick: 图片点击事件");
+                int count=Integer.valueOf(holder.cookSelectCount.getText().toString());
+                int orderCount=Integer.valueOf(holder.orderCount.getText().toString());
+                count++;
+                orderCount++;
+                holder.cookSelectCount.setText(count+"");
+                holder.cookSelectCount.setVisibility(View.VISIBLE);
+                holder.orderCount.setText(orderCount+"");
+                holder.orderCount.setVisibility(View.VISIBLE);
+                //获取当前的菜品信息，添加到想吃菜单购物车中
+                OrderDetailRequest request=new OrderDetailRequest();
+                request.setCookId(cookRequest.getId());
+                request.setCookName(cookRequest.getName());
+                request.setCount(count);
+                request.setPrice(cookRequest.getPrice());
+                request.setStatus(1);
+                request.setId(0);
+                request.setTasteId(0);
+
+                if (OrderCookList.contains(request)){
+                    OrderCookList.remove(request);
+                    OrderCookList.add(request);
+                }
+                OrderCookList.add(request);
+            }
+        });
 
     }
 

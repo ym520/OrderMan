@@ -134,4 +134,13 @@ public class OrderDetailRequest {
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof OrderDetailRequest){
+            OrderDetailRequest request= (OrderDetailRequest) obj;
+            return this.cookId.equals(request.cookId) && this.count.equals(request.count);
+        }
+        return super.equals(obj);
+    }
 }
