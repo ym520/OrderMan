@@ -152,6 +152,11 @@ public class OrderManager extends AppCompatActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.d(TAG, "onError: "+ex.getMessage().toString());
+                if (ex.getMessage()!=null && !"".equals(ex.getMessage())){
+                    if (ex.getMessage().contains("failed to connect")/*||ex.getMessage().contains("isConnected failed: EHOSTUNREACH")*/){
+                        ViewUtil.showToast(OrderManager.this,"网络连接有问题，请您切换到流畅网络。");
+                    }
+                }
                 if (ex instanceof HttpException) { // 网络错误
                     HttpException httpEx = (HttpException) ex;
                     int responseCode = httpEx.getCode();

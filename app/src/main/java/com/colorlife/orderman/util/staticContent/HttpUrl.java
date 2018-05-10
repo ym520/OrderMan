@@ -29,7 +29,7 @@ public class HttpUrl {
     public static String findOrderDetailUrl=realUrl+"order/findDetail";
     public static String addCookUrl=realUrl+"cook/add";
     public static String uploadImage=realUrl+"file/sigleImgUpload";
-    public static String downloadImage=realUrl+"file/imgDownload";
+    public static String downloadImage=realUrl+"file/imgDownload?subFilePath=";
     public static String userUpdateUrl=realUrl+"user/update";
     public static String findUserInfoUrl=realUrl+"user/findUserInfo";
 
