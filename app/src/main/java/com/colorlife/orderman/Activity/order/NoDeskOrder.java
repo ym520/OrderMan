@@ -1,26 +1,38 @@
 package com.colorlife.orderman.Activity.order;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.gesture.GestureUtils;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
-import com.colorlife.orderman.Activity.cook.AddCook;
 import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.Activity.orderDetail.OrderDetail;
 import com.colorlife.orderman.Adapter.CookAdapter;
+import com.colorlife.orderman.Adapter.CookCardListAdapter;
 import com.colorlife.orderman.Adapter.CookTypeAdapter;
 import com.colorlife.orderman.Listener.OnItemClickListener;
 import com.colorlife.orderman.R;
@@ -44,6 +56,8 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.colorlife.orderman.R.id.pop_cookCard_LinearLayout_clearAll;
 
 /**
  * Created by ym on 2018/4/21.
@@ -78,7 +92,12 @@ public class NoDeskOrder extends AppCompatActivity {
     //下单总价钱
     @ViewInject(R.id.noDeskOrder_textView_sellCount)
     private TextView priceCount;
+    //菜品购物车组件
+    @ViewInject(R.id.noDeskOrder_FrameLayout_cookCard)
+    private FrameLayout cookCard;
 
+    private int mWidth;
+    private int mHeight;
 
     private Integer pn=1;
     private String keyWord="";
@@ -137,6 +156,62 @@ public class NoDeskOrder extends AppCompatActivity {
                 pn++;
                 initCookData();
                 refresh.finishLoadMore();
+            }
+        });
+
+    }
+
+    //打开购物车
+    @Event(R.id.noDeskOrder_FrameLayout_cookCard)
+    private void openCookCard(View view){
+        Log.d(TAG, "openCookCard: ");
+        View contentView= LayoutInflater.from(getApplicationContext()).inflate(R.layout.cook_card,null);
+        contentView.setBackgroundColor(Color.WHITE);
+        //设置弹窗
+        calWidthAndHeight(getApplicationContext());
+        final PopupWindow popupWindow=new PopupWindow(findViewById(R.id.no_desk_order));
+        popupWindow.setContentView(contentView);
+        popupWindow.setHeight(mHeight);
+        popupWindow.setWidth(mWidth);
+        //设置背景
+        setBackgroundAlpha(0.5f);
+        //设置控件
+        ListView listView= (ListView) contentView.findViewById(R.id.pop_cookCard_listView_cookList);
+        final CookCardListAdapter adapter=new CookCardListAdapter(this,R.layout.pop_cook_list,wantOrderCookList);
+        listView.setAdapter(adapter);
+
+        LinearLayout clearAll= (LinearLayout) contentView.findViewById(pop_cookCard_LinearLayout_clearAll);
+        clearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                wantOrderCookList.clear();
+                adapter.notifyDataSetChanged();
+            }
+        });
+        //显示
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAsDropDown(cookCard);
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY,0,0);
+        //点击屏幕外面PopupWindow消失
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    popupWindow.dismiss();
+                }
+                return false;
+            }
+        });
+        //关闭时间
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                // popupWindow隐藏时恢复屏幕正常透明度
+                setBackgroundAlpha(1.0f);
             }
         });
 
@@ -307,6 +382,31 @@ public class NoDeskOrder extends AppCompatActivity {
         Intent intent=new Intent(this,LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * 设置PopupWindow的大小
+     * @param context
+     */
+    private void calWidthAndHeight(Context context) {
+        WindowManager wm= (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics= new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+        mWidth=metrics.widthPixels;
+        //设置高度为全屏高度的70%
+        mHeight= (int) (metrics.heightPixels*0.5);
+    }
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     *            屏幕透明度0.0-1.0 1表示完全不透明
+     */
+    public void setBackgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = ((Activity)NoDeskOrder.this).getWindow()
+                .getAttributes();
+        lp.alpha = bgAlpha;
+        ((Activity) NoDeskOrder.this).getWindow().setAttributes(lp);
     }
 
     public int doCreateOrder(final OrderRequest orderRequest){
