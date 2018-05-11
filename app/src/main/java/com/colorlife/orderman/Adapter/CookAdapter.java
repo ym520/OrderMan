@@ -58,6 +58,32 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
     //更新数据
     public void update(List<CookRequest> cookRequests){
         this.cookRequestList=cookRequests;
+        if (OrderCookList.size()>0){
+            Double saleCount=0.00;
+            for (OrderDetailRequest d:OrderCookList){
+                saleCount=saleCount+d.getCount()*d.getPrice();
+            }
+            DecimalFormat df = new DecimalFormat("#.00");
+            priceCount.setText(df.format(saleCount));
+        }
+        notifyDataSetChanged();
+    }
+
+    //更新数据
+    public void update(List<CookRequest> cookRequests,List<OrderDetailRequest> orderCookList){
+        this.cookRequestList=cookRequests;
+        this.OrderCookList=orderCookList;
+        if (OrderCookList.size()>0){
+            Double saleCount=0.00;
+            int order_count=0;
+            for (OrderDetailRequest d:OrderCookList){
+                saleCount=saleCount+d.getCount()*d.getPrice();
+                order_count=order_count+d.getCount();
+            }
+            DecimalFormat df = new DecimalFormat("#.00");
+            priceCount.setText(df.format(saleCount));
+            orderCount.setText(String.valueOf(order_count));
+        }
         notifyDataSetChanged();
     }
 
@@ -84,12 +110,15 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        final int po=position;
         final CookRequest cookRequest=cookRequestList.get(position);
         //Log.d(this.toString(), "onBindViewHolder:  Name:"+cookRequest.getName()+" ImageUrl:"+cookRequest.getImageUrl());
         holder.cookName.setText(cookRequest.getName());
         DecimalFormat df = new DecimalFormat("#.00");
         holder.cookPrice.setText(df.format(cookRequest.getPrice())+"/每份");
+        //设置列表图片，网络的和本地上传的
         if (cookRequest.getImageUrl()!=null && !"".equals(cookRequest.getImageUrl())){
+            //网络的
             if (cookRequest.getImageUrl().contains("http")){
                 x.image().bind(holder.CookImg, cookRequest.getImageUrl(),getImageOptions());
             }else {
@@ -97,10 +126,19 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
                 x.image().bind(holder.CookImg, HttpUrl.downloadImage+cookRequest.getImageUrl().replaceAll("\\\\","%5C"),getImageOptions());
             }
         }
-        holder.cookSelectCount.setText(0+"");
-        holder.cookSelectCount.setVisibility(View.INVISIBLE);
-        holder.orderCount.setText(0+"");
-        holder.orderCount.setVisibility(View.INVISIBLE);
+        holder.cookSelectCount.setText(cookRequest.getOrderCount().toString());
+        if (cookRequest.getOrderCount()==0){
+            holder.cookSelectCount.setVisibility(View.INVISIBLE);
+        }else {
+            holder.cookSelectCount.setVisibility(View.VISIBLE);
+        }
+        if (Integer.valueOf(holder.orderCount.getText().toString())==0){
+            holder.orderCount.setVisibility(View.INVISIBLE);
+        }else {
+            holder.orderCount.setVisibility(View.VISIBLE);
+        }
+
+        //点击图片,生成一份订单详情,角标进行自增
         holder.CookImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +151,8 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
                 holder.cookSelectCount.setVisibility(View.VISIBLE);
                 holder.orderCount.setText(orderCount+"");
                 holder.orderCount.setVisibility(View.VISIBLE);
+                cookRequest.setOrderCount(count);
+                cookRequestList.set(po,cookRequest);
                 //获取当前的菜品信息，添加到想吃菜单购物车中
                 OrderDetailRequest request=new OrderDetailRequest();
                 request.setCookId(cookRequest.getId());
@@ -150,6 +190,7 @@ public class CookAdapter extends RecyclerView.Adapter<CookAdapter.ViewHolder> {
         return this.cookRequestList.size();
     }
 
+    //设置图片显示参数
     public ImageOptions getImageOptions(){
         if (imageOptions!=null){
             return imageOptions;

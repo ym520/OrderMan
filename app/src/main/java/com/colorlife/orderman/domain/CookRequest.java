@@ -28,6 +28,17 @@ public class CookRequest {
 
     private String modifyTime;
 
+    //点菜的量，用于显示角标
+    private Integer orderCount;
+
+    public Integer getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(Integer orderCount) {
+        this.orderCount = orderCount;
+    }
+
     public Integer getId() {
         return id;
     }

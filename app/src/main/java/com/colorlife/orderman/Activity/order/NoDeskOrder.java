@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -54,6 +55,7 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,12 +111,14 @@ public class NoDeskOrder extends AppCompatActivity {
     private OrderRequest request;
     private CookTypeAdapter cookTypeAdapter;
     private CookAdapter cookAdapter;
+    private CookCardListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
         ActivityCollector.addActivity(this);
+        //设置菜品类型列表
         StaggeredGridLayoutManager layoutManager=new StaggeredGridLayoutManager(15,StaggeredGridLayoutManager.VERTICAL);
         cookTypeRecyclerView.setLayoutManager(layoutManager);
         cookTypeAdapter=new CookTypeAdapter(cookTypeList);
@@ -128,6 +132,7 @@ public class NoDeskOrder extends AppCompatActivity {
             }
         });
 
+        //设置菜品列表
         StaggeredGridLayoutManager layoutManager2=new StaggeredGridLayoutManager(8,StaggeredGridLayoutManager.VERTICAL);
         cookRecyclerView.setLayoutManager(layoutManager2);
         cookAdapter=new CookAdapter(cookList,OrderCount,wantOrderCookList,priceCount);
@@ -177,17 +182,110 @@ public class NoDeskOrder extends AppCompatActivity {
         setBackgroundAlpha(0.5f);
         //设置控件
         ListView listView= (ListView) contentView.findViewById(R.id.pop_cookCard_listView_cookList);
-        final CookCardListAdapter adapter=new CookCardListAdapter(this,R.layout.pop_cook_list,wantOrderCookList);
+        adapter=new CookCardListAdapter(this,R.layout.pop_cook_list,wantOrderCookList);
         listView.setAdapter(adapter);
 
+        //清除购物车的按钮
         LinearLayout clearAll= (LinearLayout) contentView.findViewById(pop_cookCard_LinearLayout_clearAll);
         clearAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //清空购物车的数据
                 wantOrderCookList.clear();
                 adapter.notifyDataSetChanged();
+                List<CookRequest> list=new ArrayList<CookRequest>();
+                list.addAll(cookList);
+                //清空原来的菜品列表数据，设置每一个点菜量为0，重新赋值
+                cookList.clear();
+                for (CookRequest request:list){
+                    request.setOrderCount(0);
+                    cookList.add(request);
+                }
+                //更新菜品购物车数据
+                OrderCount.setText("0");
+                //更新菜品列表
+                cookAdapter.update(cookList);
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                Log.d(TAG, "onItemClick: "+view.getId());
+                final TextView add= (TextView) view.findViewById(R.id.pop_cookCard_textView_add);
+                TextView sub= (TextView) view.findViewById(R.id.pop_cookCard_textView_subtraction);
+                final TextView order_count= (TextView) view.findViewById(R.id.pop_cookCard_textView_cookCount);
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int count=Integer.valueOf(wantOrderCookList.get(i).getCount());
+                        count++;
+                        //Log.d(TAG, "addonClick: "+count);
+                        order_count.setText(String.valueOf(count));
+                        OrderDetailRequest request=wantOrderCookList.get(i);
+                        request.setCount(count);
+                        wantOrderCookList.set(i,request);
+
+                        for (int i=0;i<cookList.size();i++){
+                            CookRequest c=cookList.get(i);
+                            if (c.getId()==request.getCookId()){
+                                c.setOrderCount(count);
+                                cookList.set(i,c);
+                                break;
+                            }
+                        }
+                        //更新菜品的角标数据
+                        cookAdapter.update(cookList,wantOrderCookList);
+                    }
+                });
+                sub.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int count=Integer.valueOf(wantOrderCookList.get(i).getCount());
+                        count--;
+                        //Log.d(TAG, "addonClick: "+count);
+
+                        if (count>0){
+                            order_count.setText(String.valueOf(count));
+                            OrderDetailRequest request=wantOrderCookList.get(i);
+                            request.setCount(count);
+                            wantOrderCookList.set(i,request);
+
+                            for (int i=0;i<cookList.size();i++){
+                                CookRequest c=cookList.get(i);
+                                if (c.getId()==request.getCookId()){
+                                    c.setOrderCount(count);
+                                    cookList.set(i,c);
+                                    break;
+                                }
+                            }
+                            //更新菜品的角标数据
+                            cookAdapter.update(cookList,wantOrderCookList);
+                        }else if (count==0){
+                            order_count.setText(String.valueOf(count));
+                            OrderDetailRequest request=wantOrderCookList.get(i);
+                            request.setCount(count);
+                            wantOrderCookList.remove(i);
+                            adapter.notifyDataSetChanged();
+
+                            for (int i=0;i<cookList.size();i++){
+                                CookRequest c=cookList.get(i);
+                                if (c.getId()==request.getCookId()){
+                                    c.setOrderCount(count);
+                                    cookList.set(i,c);
+                                    break;
+                                }
+                            }
+                            //更新菜品的角标数据
+                            cookAdapter.update(cookList,wantOrderCookList);
+                        }
+
+                    }
+                });
+            }
+        });
+
+
         //显示
         int[] location = new int[2];
         view.getLocationOnScreen(location);
@@ -206,7 +304,7 @@ public class NoDeskOrder extends AppCompatActivity {
                 return false;
             }
         });
-        //关闭时间
+        //关闭时调整背景透明度
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -262,7 +360,11 @@ public class NoDeskOrder extends AppCompatActivity {
                 String code= JSON.parseObject(result).getString("code");
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
-                    cookList=JSON.parseArray(JSON.parseObject(JSON.parseObject(result).getString("data")).getString("list"),CookRequest.class);
+                    List<CookRequest> list=JSON.parseArray(JSON.parseObject(JSON.parseObject(result).getString("data")).getString("list"),CookRequest.class);
+                    for (CookRequest r:list){
+                        r.setOrderCount(0);
+                        cookList.add(r);
+                    }
                     if (cookList.size()==0){
                         if (pn==1){
                             cookAdapter.update(cookList);
@@ -336,7 +438,12 @@ public class NoDeskOrder extends AppCompatActivity {
                 String code= JSON.parseObject(result).getString("code");
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
-                    cookTypeList=JSON.parseArray(JSON.parseObject(result).getString("data"),CookTypeList.class);
+                    List<CookTypeList> List=JSON.parseArray(JSON.parseObject(result).getString("data"),CookTypeList.class);
+                    if (List.size()>0){
+                        for (CookTypeList i:List){
+                            cookTypeList.add(i);
+                        }
+                    }
                     if (cookTypeList.size()==0){
                         ViewUtil.showToast(NoDeskOrder.this,"查询不到数据！");
                     }else {

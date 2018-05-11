@@ -27,7 +27,9 @@ public class CookCardListAdapter extends ArrayAdapter<OrderDetailRequest> {
         this.resourceID=resource;
     }
 
+    public void update(List<OrderDetailRequest> object){
 
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         OrderDetailRequest detailRequest=getItem(position);
