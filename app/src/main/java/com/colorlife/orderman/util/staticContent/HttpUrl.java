@@ -35,6 +35,7 @@ public class HttpUrl {
     public static String addOrderUrl=realUrl+"order/add";
     public static String orderCheckOutUrl=realUrl+"order/checkOut";
     public static String findOrderByDeskIdUrl=realUrl+"order/findOrderByDeskId";
+    public static String anaDataUrl=realUrl+"order/findOrderReport";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)

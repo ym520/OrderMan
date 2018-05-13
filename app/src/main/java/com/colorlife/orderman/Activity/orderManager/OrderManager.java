@@ -229,7 +229,7 @@ public class OrderManager extends AppCompatActivity {
     private void getOrderWithDesk(View view){
         orderWithoutDesk.setBackgroundColor(Color.parseColor("#ffffff"));
         orderWithDesk.setBackgroundColor(Color.parseColor("#a4a2a2"));
-        type=2;
+        type=1;
         pn=1;
         initData(pn,status,type,keyword);
     }

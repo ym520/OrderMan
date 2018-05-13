@@ -37,6 +37,7 @@ import org.xutils.x;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by ym on 2018/4/23.
@@ -126,6 +127,10 @@ public class DeskListAdapter extends RecyclerView.Adapter<DeskListAdapter.ViewHo
                     }).show();
                 }else if (deskList.getStatus()==2){
                     RequestParams requestParams=new RequestParams(HttpUrl.findOrderByDeskIdUrl);
+                    //获取cookie
+                    SharedPreferences sp2 = context.getSharedPreferences("cookie", MODE_PRIVATE);
+                    String cookie=sp2.getString("JSESSIONID","");
+                    requestParams.addHeader("Cookie","JSESSIONID="+cookie);
                     requestParams.addParameter("id",deskList.getId());
                     x.http().get(requestParams, new Callback.CommonCallback<String>() {
                         @Override
