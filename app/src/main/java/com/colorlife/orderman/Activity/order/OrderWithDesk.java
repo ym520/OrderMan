@@ -100,46 +100,6 @@ public class OrderWithDesk extends AppCompatActivity {
         adapter=new DeskListAdapter(deskLists,OrderWithDesk.this);
         deskListView.setAdapter(adapter);
         initDesk(pn,status);
-        /*adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.d(TAG, "onClick: ");
-                if (view.getId()==R.id.desk_textView_image){
-                    Log.d(TAG, "onClick: ");
-                    deskList=deskLists.get(position);
-                    if (deskList.getStatus()==1){
-                        order = new OrderRequest();
-                        DialogUIUtils.showAlertInput(OrderWithDesk.this, "开台  " + deskList.getCode(), null, "人数", "取消", "确定", true, false, new DialogUIListener() {
-                            @Override
-                            public void onPositive() {
-                                //取消
-
-                            }
-                            @Override
-                            public void onNegative() {
-                                //确定
-                                order.setDeskId(deskList.getId());
-                                order.setDeskName(deskList.getCode());
-                                intent = new Intent(OrderWithDesk.this, NoDeskOrder.class);
-                                intent.putExtra("order", order);
-                                startActivity(intent);
-                            }
-                            @Override
-                            public void onGetInput(CharSequence input1, CharSequence input2) {
-                                order.setPersonCount(Integer.valueOf(input2.toString()));
-                            }
-                        }).show();
-                    }else if (deskList.getStatus()==2){
-                        Intent intent=new Intent(OrderWithDesk.this, OrderDetail.class);
-                        //查询当前的桌位被占用的订单
-                        intent.putExtra("orderId",1);
-                        startActivity(intent);
-                    }
-
-                }
-            }
-        });*/
-
         refresh.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
@@ -192,6 +152,9 @@ public class OrderWithDesk extends AppCompatActivity {
                     ViewUtil.showToast(OrderWithDesk.this,msg);
                     if (msg.equals("你当前没有登录！没有该权限")){
                         StatusUtil.isLogin=false;
+                        if (!StatusUtil.isLogin){
+                            intoLogin();
+                        }
                     }
                 }
             }
@@ -281,9 +244,6 @@ public class OrderWithDesk extends AppCompatActivity {
         status=3;
         initDesk(pn,status);
         adapter.notifyDataSetChanged();
-        if (!StatusUtil.isLogin){
-            intoLogin();
-        }
     }
 
     //刷新
@@ -316,18 +276,6 @@ public class OrderWithDesk extends AppCompatActivity {
         Intent intent=new Intent(this,LoginActivity.class);
         startActivity(intent);
         finish();
-        /*DialogUIUtils.showMdAlert(OrderWithDesk.this, "登录提示", "你当前没有登录，无法进行相关的操作，是否前往登录？", new DialogUIListener() {
-            @Override
-            public void onPositive() {
-                Intent intent=new Intent(OrderWithDesk.this,LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            @Override
-            public void onNegative() {
-
-            }
-        });*/
     }
 
 }

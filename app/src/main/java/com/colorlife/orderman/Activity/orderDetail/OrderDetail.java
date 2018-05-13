@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
 import com.colorlife.orderman.Activity.order.NoDeskOrder;
+import com.colorlife.orderman.Activity.orderManager.CheckOutOrder;
 import com.colorlife.orderman.Adapter.OrderDetailAdapter;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.OrderDetailRequest;
@@ -46,7 +47,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.colorlife.orderman.R.id.orderDetail_linearLayout_print_pos;
 
 
 /**
@@ -74,6 +74,8 @@ public class OrderDetail extends AppCompatActivity {
     private TextView orderTime;
     @ViewInject(R.id.orderDetail_listView_CookDetail)
     private ListView orderDetail;
+    @ViewInject(R.id.orderDetail_textView_orderPearsonCount)
+    private TextView orderPearsonCount;
 
     private OrderRequest orderRequest=new OrderRequest();
     List<OrderDetailRequest> list=new ArrayList<>();
@@ -98,6 +100,14 @@ public class OrderDetail extends AppCompatActivity {
             id=Integer.valueOf(orderId);
         }*/
         initData(id);
+    }
+
+    @Event(R.id.orderDetail_button_doOrder)
+    private void intoOrder(View view){
+        Intent intent=new Intent(OrderDetail.this, CheckOutOrder.class);
+        intent.putExtra("orderId",id);
+        startActivity(intent);
+        finish();
     }
 
     @Event(R.id.orderDetail_ImageView_moreMenu)
@@ -141,22 +151,21 @@ public class OrderDetail extends AppCompatActivity {
             }
         });
         //设置控件
-        LinearLayout addCook= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_add_cook);
-        LinearLayout bindDesk= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_bind_desk);
-        LinearLayout trueOrder= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_true_order);
-        LinearLayout presentCook= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_present_cook);
-        LinearLayout changeDesk= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_change_desk);
-        LinearLayout mixDesk= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_mix_desk);
-        LinearLayout editOrder= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_edit_order);
-        LinearLayout undoOrder= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_undo_order);
-        LinearLayout printPost= (LinearLayout) view.findViewById(R.id.orderDetail_linearLayout_print_pos);
+        LinearLayout addCook= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_add_cook);
+        LinearLayout bindDesk= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_bind_desk);
+        LinearLayout trueOrder= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_true_order);
+        LinearLayout presentCook= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_present_cook);
+        LinearLayout changeDesk= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_change_desk);
+        LinearLayout mixDesk= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_mix_desk);
+        LinearLayout editOrder= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_edit_order);
+        LinearLayout undoOrder= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_undo_order);
+        LinearLayout printPost= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_print_pos);
 
         addCook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: addCook");
                 Intent intent=new Intent(OrderDetail.this,NoDeskOrder.class);
-
                 startActivity(intent);
             }
         });
@@ -188,6 +197,7 @@ public class OrderDetail extends AppCompatActivity {
         ((Activity) OrderDetail.this).getWindow().setAttributes(lp);
     }
 
+    //初始化订单数据
     private void initData(Integer id) {
         RequestParams params=new RequestParams(HttpUrl.findOrderDetailUrl);
         //获取cookie
@@ -203,17 +213,24 @@ public class OrderDetail extends AppCompatActivity {
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
                     orderRequest=JSON.parseObject(JSON.parseObject(result).getString("data"),new TypeReference<OrderRequest>(){});
-                    //桌子名称
-                    deskName.setText(orderRequest.getDeskName());
-                    //总价
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    sellPriceCount.setText(df.format(orderRequest.getSaleTotal()));
-                    //订单号
-                    orderCode.setText("订单号:"+orderRequest.getNumber());
-                    //设置下单时间
-                    orderTime.setText(orderRequest.getCreateTime());
+
 
                     if (orderRequest!=null){
+                        //桌子名称
+                        deskName.setText(orderRequest.getDeskName());
+                        //总价
+                        DecimalFormat df = new DecimalFormat("#.00");
+                        sellPriceCount.setText(df.format(orderRequest.getSaleTotal()));
+                        //订单号
+                        orderCode.setText("订单号:"+orderRequest.getNumber());
+                        //设置下单时间
+                        orderTime.setText(orderRequest.getCreateTime());
+                        //设置人数
+                        orderPearsonCount.setText("人数： "+orderRequest.getPersonCount());
+                        if (orderRequest.getStatus()==2){
+                            Order.setVisibility(View.INVISIBLE);
+                            moreMenu.setVisibility(View.INVISIBLE);
+                        }
                         list=orderRequest.getOrderDetailRequests();
                         adapter.clear();
                         adapter.addAll(list);
