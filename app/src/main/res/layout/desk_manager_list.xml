@@ -7,6 +7,7 @@
     android:layout_height="60dp">
 
     <TextView
+        android:id="@+id/deskManager_list_textView_deskName"
         android:text="测试"
         android:gravity="center"
         android:textSize="20sp"
@@ -20,6 +21,7 @@
         android:layout_weight="4"
         android:layout_height="wrap_content" />
     <TextView
+        android:id="@+id/deskManager_list_textView_deskPerson"
         android:text="7人"
         android:gravity="center"
         android:textSize="20sp"
@@ -27,9 +29,11 @@
         android:layout_weight="1"
         android:layout_height="wrap_content" />
     <Switch
+        android:id="@+id/deskManager_list_Switch_status"
+        android:focusable="false"
         android:gravity="center"
         android:layout_width="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.8"
         android:layout_height="wrap_content" />
     <TextView
         android:gravity="center"

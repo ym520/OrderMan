@@ -85,7 +85,7 @@ public class OrderWithDesk extends AppCompatActivity {
     //当前页
     private Integer pn=1;
     //状态
-    private Integer status=0;
+    private Integer status=1;
 
     List<DeskList> deskLists=new ArrayList<>();
 
