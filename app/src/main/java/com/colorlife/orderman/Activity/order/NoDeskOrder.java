@@ -55,7 +55,6 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
