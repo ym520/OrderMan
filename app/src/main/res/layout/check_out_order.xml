@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--头部-->
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_width="match_parent"
+        android:background="#f2f1f1"
+        android:layout_height="65dp">
+
+        <ImageButton
+            android:id="@+id/CheckOutOrder_imageButton_back"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:background="@mipmap/back"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/orderDetail_textView_back"
+            android:text="返回"
+            android:paddingLeft="10dp"
+            android:textSize="21sp"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/CheckOutOrder_textView_deskName"
+            android:text="10号桌"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_weight="5"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/CheckOutOrder_recyclerView_payWay"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:paddingLeft="20dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:gravity="center"
+                            android:text="消费金额:"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:gravity="center"
+                            android:id="@+id/CheckOutOrder_textView_orderPrice"
+                            android:text="72.00"
+                            android:textSize="25sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="left"
+                        android:layout_gravity="left"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:gravity="center"
+                            android:text="优惠:"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                        <EditText
+                            android:id="@+id/CheckOutOrder_editText_discounts"
+                            android:text="0.00"
+                            android:inputType="numberDecimal"
+                            android:textSize="25sp"
+                            android:layout_width="100dp"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="left"
+                        android:layout_gravity="left"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:gravity="center"
+                            android:text="应收金额:"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:id="@+id/CheckOutOrder_textView_priceTotal"
+                            android:gravity="center"
+                            android:text="72.00"
+                            android:textColor="#d69e19"
+                            android:typeface="sans"
+                            android:textSize="28sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:gravity="center"
+                            android:text="支付备注:"
+                            android:textSize="20sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent" />
+                        <EditText
+                            android:id="@+id/CheckOutOrder_editText_remark"
+                            android:textSize="25sp"
+                            android:layout_marginRight="60dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <!--底部按钮导航-->
+    <LinearLayout
+        android:background="#f2efef"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_weight="0.6"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <CheckBox
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="25sp"
+                android:text="是否撤台？"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/CheckOutOrder_button_trueOrder"
+            android:text="确定"
+            android:textColor="#fff"
+            android:background="#d69e19"
+            android:textSize="25dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>

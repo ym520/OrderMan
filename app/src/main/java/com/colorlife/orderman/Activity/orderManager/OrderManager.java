@@ -70,7 +70,7 @@ public class OrderManager extends AppCompatActivity {
     @ViewInject(R.id.orderManager_PullToRefreshLayout_refresh)
     private PullToRefreshLayout refresh;
 
-    private Integer status=2;
+    private Integer status=1;
     private Integer pn=1;
     private Integer type=1;
     private String keyword=null;
@@ -208,7 +208,7 @@ public class OrderManager extends AppCompatActivity {
         dealWithAll.setBackgroundResource(R.drawable.bg_ordemanage_detail_white);
         dealWith.setBackgroundResource(R.drawable.bg_ordemanage_detail_bank);
         noDealWith.setBackgroundResource(R.drawable.bg_ordemanage_detail_white);
-        status=1;
+        status=2;
         pn=1;
         initData(pn,status,type,keyword);
     }
@@ -219,7 +219,7 @@ public class OrderManager extends AppCompatActivity {
         dealWithAll.setBackgroundResource(R.drawable.bg_ordemanage_detail_white);
         dealWith.setBackgroundResource(R.drawable.bg_ordemanage_detail_white);
         noDealWith.setBackgroundResource(R.drawable.bg_ordemanage_detail_bank);
-        status=2;
+        status=1;
         pn=1;
         initData(pn,status,type,keyword);
     }
@@ -256,5 +256,11 @@ public class OrderManager extends AppCompatActivity {
         super.onDestroy();
         orderListVos.clear();
         ActivityCollector.removeActivity(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initData(pn,status,type,keyword);
     }
 }

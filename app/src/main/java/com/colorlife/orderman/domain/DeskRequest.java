@@ -1,10 +1,10 @@
 package com.colorlife.orderman.domain;
 
 /**
- * Created by ym on 2018/4/23.
+ * Created by ym on 2018/5/16.
  */
 
-public class DeskList {
+public class DeskRequest {
     private Integer id;
 
     private String code;
@@ -13,7 +13,11 @@ public class DeskList {
 
     private Integer status;
 
-    private Integer persons;
+    private Integer userId;
+
+    private String createTime;
+
+    private String modifyTime;
 
     public Integer getId() {
         return id;
@@ -47,11 +51,27 @@ public class DeskList {
         this.status = status;
     }
 
-    public Integer getPersons() {
-        return persons;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setPersons(Integer persons) {
-        this.persons = persons;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(String modifyTime) {
+        this.modifyTime = modifyTime;
     }
 }

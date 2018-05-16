@@ -85,7 +85,7 @@ public class OrderWithDesk extends AppCompatActivity {
     //当前页
     private Integer pn=1;
     //状态
-    private Integer status=0;
+    private Integer status=1;
 
     List<DeskList> deskLists=new ArrayList<>();
 
@@ -100,7 +100,6 @@ public class OrderWithDesk extends AppCompatActivity {
         adapter=new DeskListAdapter(deskLists,OrderWithDesk.this);
         deskListView.setAdapter(adapter);
         initDesk(pn,status);
-
         refresh.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
@@ -153,6 +152,9 @@ public class OrderWithDesk extends AppCompatActivity {
                     ViewUtil.showToast(OrderWithDesk.this,msg);
                     if (msg.equals("你当前没有登录！没有该权限")){
                         StatusUtil.isLogin=false;
+                        if (!StatusUtil.isLogin){
+                            intoLogin();
+                        }
                     }
                 }
             }
@@ -242,9 +244,6 @@ public class OrderWithDesk extends AppCompatActivity {
         status=3;
         initDesk(pn,status);
         adapter.notifyDataSetChanged();
-        if (!StatusUtil.isLogin){
-            intoLogin();
-        }
     }
 
     //刷新
@@ -277,18 +276,6 @@ public class OrderWithDesk extends AppCompatActivity {
         Intent intent=new Intent(this,LoginActivity.class);
         startActivity(intent);
         finish();
-        /*DialogUIUtils.showMdAlert(OrderWithDesk.this, "登录提示", "你当前没有登录，无法进行相关的操作，是否前往登录？", new DialogUIListener() {
-            @Override
-            public void onPositive() {
-                Intent intent=new Intent(OrderWithDesk.this,LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            @Override
-            public void onNegative() {
-
-            }
-        });*/
     }
 
 }

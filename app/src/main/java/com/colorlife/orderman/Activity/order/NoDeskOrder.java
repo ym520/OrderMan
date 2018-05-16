@@ -330,8 +330,10 @@ public class NoDeskOrder extends AppCompatActivity {
     @Event(R.id.noDeskOrder_textView_order)
     private void doOrder(View view){
         request.setStatus(1);
-        request.setDeskName("无桌位");
-        request.setDeskId(0);
+        if (request.getDeskId()==null || "".equals(request.getDeskId())){
+            request.setDeskName("无桌位");
+            request.setDeskId(0);
+        }
         request.setNumber(System.currentTimeMillis()+"");
         request.setId(0);
         request.setUserId(0);
@@ -454,6 +456,9 @@ public class NoDeskOrder extends AppCompatActivity {
                     ViewUtil.showToast(NoDeskOrder.this,msg);
                     if (msg.equals("你当前没有登录！没有该权限")){
                         StatusUtil.isLogin=false;
+                        Intent intent=new Intent(NoDeskOrder.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }

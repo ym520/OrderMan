@@ -1,18 +1,32 @@
 package com.colorlife.orderman.Activity.orderDetail;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.order.NoDeskOrder;
+import com.colorlife.orderman.Activity.orderManager.CheckOutOrder;
 import com.colorlife.orderman.Adapter.OrderDetailAdapter;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.OrderDetailRequest;
@@ -25,12 +39,14 @@ import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 /**
@@ -58,11 +74,16 @@ public class OrderDetail extends AppCompatActivity {
     private TextView orderTime;
     @ViewInject(R.id.orderDetail_listView_CookDetail)
     private ListView orderDetail;
+    @ViewInject(R.id.orderDetail_textView_orderPearsonCount)
+    private TextView orderPearsonCount;
 
     private OrderRequest orderRequest=new OrderRequest();
     List<OrderDetailRequest> list=new ArrayList<>();
     private Integer id=0;
     private OrderDetailAdapter adapter;
+
+    private int mWidth;
+    private int mHeight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +102,102 @@ public class OrderDetail extends AppCompatActivity {
         initData(id);
     }
 
+    @Event(R.id.orderDetail_button_doOrder)
+    private void intoOrder(View view){
+        Intent intent=new Intent(OrderDetail.this, CheckOutOrder.class);
+        intent.putExtra("orderId",id);
+        startActivity(intent);
+        finish();
+    }
+
+    @Event(R.id.orderDetail_ImageView_moreMenu)
+    private void openMoreMenu(View view){
+        Log.d(TAG, "openMoreMenu: ");
+        View contentView= LayoutInflater.from(getApplicationContext()).inflate(R.layout.order_detail_menu,null);
+        contentView.setBackgroundColor(Color.WHITE);
+        //设置弹窗
+        calWidthAndHeight(getApplicationContext());
+        final PopupWindow popupWindow=new PopupWindow(findViewById(R.id.order_detail));
+        popupWindow.setContentView(contentView);
+        popupWindow.setHeight(mHeight);
+        popupWindow.setWidth(mWidth);
+        //设置背景
+        setBackgroundAlpha(0.4f);
+        //显示
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.showAsDropDown(moreMenu);
+        //位置
+        popupWindow.showAtLocation(view, Gravity.NO_GRAVITY,location[0]+view.getWidth(), location[1]);
+        //点击屏幕外面PopupWindow消失
+        popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    popupWindow.dismiss();
+                }
+                return false;
+            }
+        });
+        //关闭时调整背景透明度
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                // popupWindow隐藏时恢复屏幕正常透明度
+                setBackgroundAlpha(1.0f);
+            }
+        });
+        //设置控件
+        LinearLayout addCook= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_add_cook);
+        LinearLayout bindDesk= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_bind_desk);
+        LinearLayout trueOrder= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_true_order);
+        LinearLayout presentCook= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_present_cook);
+        LinearLayout changeDesk= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_change_desk);
+        LinearLayout mixDesk= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_mix_desk);
+        LinearLayout editOrder= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_edit_order);
+        LinearLayout undoOrder= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_undo_order);
+        LinearLayout printPost= (LinearLayout) contentView.findViewById(R.id.orderDetail_linearLayout_print_pos);
+
+        addCook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: addCook");
+                Intent intent=new Intent(OrderDetail.this,NoDeskOrder.class);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    /**
+     * 设置PopupWindow的大小
+     * @param context
+     */
+    private void calWidthAndHeight(Context context) {
+        WindowManager wm= (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics= new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+        mWidth= (int) (metrics.widthPixels*0.3);
+        //设置高度为全屏高度的70%
+        mHeight= (int) (metrics.heightPixels*0.4);
+    }
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     *            屏幕透明度0.0-1.0 1表示完全不透明
+     */
+    public void setBackgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = ((Activity)OrderDetail.this).getWindow()
+                .getAttributes();
+        lp.alpha = bgAlpha;
+        ((Activity) OrderDetail.this).getWindow().setAttributes(lp);
+    }
+
+    //初始化订单数据
     private void initData(Integer id) {
         RequestParams params=new RequestParams(HttpUrl.findOrderDetailUrl);
         //获取cookie
@@ -96,17 +213,24 @@ public class OrderDetail extends AppCompatActivity {
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
                     orderRequest=JSON.parseObject(JSON.parseObject(result).getString("data"),new TypeReference<OrderRequest>(){});
-                    //桌子名称
-                    deskName.setText(orderRequest.getDeskName());
-                    //总价
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    sellPriceCount.setText(df.format(orderRequest.getSaleTotal()));
-                    //订单号
-                    orderCode.setText("订单号:"+orderRequest.getNumber());
-                    //设置下单时间
-                    orderTime.setText(orderRequest.getCreateTime());
+
 
                     if (orderRequest!=null){
+                        //桌子名称
+                        deskName.setText(orderRequest.getDeskName());
+                        //总价
+                        DecimalFormat df = new DecimalFormat("#.00");
+                        sellPriceCount.setText(df.format(orderRequest.getSaleTotal()));
+                        //订单号
+                        orderCode.setText("订单号:"+orderRequest.getNumber());
+                        //设置下单时间
+                        orderTime.setText(orderRequest.getCreateTime());
+                        //设置人数
+                        orderPearsonCount.setText("人数： "+orderRequest.getPersonCount());
+                        if (orderRequest.getStatus()==2){
+                            Order.setVisibility(View.INVISIBLE);
+                            moreMenu.setVisibility(View.INVISIBLE);
+                        }
                         list=orderRequest.getOrderDetailRequests();
                         adapter.clear();
                         adapter.addAll(list);

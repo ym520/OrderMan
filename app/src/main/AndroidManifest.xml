@@ -52,6 +52,9 @@
         <activity android:name=".Activity.desk.AddDesk"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
             android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.orderManager.CheckOutOrder"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
