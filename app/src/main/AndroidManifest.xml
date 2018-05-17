@@ -55,6 +55,10 @@
         <activity android:name=".Activity.orderManager.CheckOutOrder"
             android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
             android:screenOrientation="landscape"></activity>
+        <activity android:name=".Activity.cook.UpdateCook"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnspecified"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

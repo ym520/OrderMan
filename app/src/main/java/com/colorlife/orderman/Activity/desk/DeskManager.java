@@ -23,6 +23,7 @@ import com.colorlife.orderman.domain.DeskList;
 import com.colorlife.orderman.domain.OrderListVo;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
+import com.dou361.dialogui.DialogUIUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 
@@ -129,6 +130,7 @@ public class DeskManager extends AppCompatActivity {
         requestParams.addParameter("pn",pn);
         requestParams.addParameter("pageSize",20);
         requestParams.addParameter("status",status);
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -160,6 +162,7 @@ public class DeskManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
@@ -198,7 +201,7 @@ public class DeskManager extends AppCompatActivity {
         requestParams.addHeader("Cookie","JSESSIONID="+cookie);
         requestParams.addParameter("id",id);
         requestParams.addParameter("opt",opt);
-
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -220,6 +223,7 @@ public class DeskManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

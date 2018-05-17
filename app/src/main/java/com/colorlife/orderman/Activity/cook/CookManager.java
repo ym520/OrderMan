@@ -9,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.desk.DeskManager;
 import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.Activity.setting.SettingIndex;
 import com.colorlife.orderman.Adapter.CookManagerListAdapter;
@@ -88,6 +91,15 @@ public class CookManager extends AppCompatActivity {
 
         cookManagerListAdapter=new CookManagerListAdapter(this,R.layout.cook_manager_list,cookList);
         cookListView.setAdapter(cookManagerListAdapter);
+        cookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                CookRequest request=cookList.get(i);
+                Intent  intent=new Intent(CookManager.this,UpdateCook.class);
+                intent.putExtra("cook",request);
+                startActivity(intent);
+            }
+        });
 
         //刷新相关
         refresh.setRefreshListener(new BaseRefreshListener() {
@@ -177,7 +189,7 @@ public class CookManager extends AppCompatActivity {
         SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
         String cookie=sp2.getString("JSESSIONID","");
         params.addHeader("Cookie","JSESSIONID="+cookie);
-
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -206,6 +218,7 @@ public class CookManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
@@ -241,7 +254,8 @@ public class CookManager extends AppCompatActivity {
         params.addParameter("pageSize",30);
         params.addParameter("typeId",cookTypeId);
         params.addParameter("keyWord",keyWord);
-
+        Log.d(TAG, "initCookData: params"+params.toString());
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -249,20 +263,24 @@ public class CookManager extends AppCompatActivity {
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
                     List<CookRequest> list=JSON.parseArray(JSON.parseObject(JSON.parseObject(result).getString("data")).getString("list"),CookRequest.class);
-                    for (CookRequest r:list){
+                    cookList=JSON.parseArray(JSON.parseObject(JSON.parseObject(result).getString("data")).getString("list"),CookRequest.class);
+                    /*for (CookRequest r:list){
                         r.setOrderCount(0);
                         cookList.add(r);
-                    }
+                    }*/
                     if (cookList.size()==0){
                         if (pn==1){
-                            cookManagerListAdapter.notifyDataSetChanged();
+                            cookManagerListAdapter.clear();
                         }
+                        cookManagerListAdapter.addAll(cookList);
+                        cookManagerListAdapter.notifyDataSetChanged();
                         ViewUtil.showToast(CookManager.this,"查询不到数据！");
                     }else {
                         if (pn==1){
-                            cookManagerListAdapter.notifyDataSetChanged();
+                            cookManagerListAdapter.clear();
                         }
                         cookManagerListAdapter.addMore(cookList);
+                        cookManagerListAdapter.notifyDataSetChanged();
                         Log.d(TAG, "onSuccess: 数据总个数："+cookList.size());
                         Log.d(TAG, "onSuccess: 数据刷新完成！");
                     }
@@ -278,6 +296,7 @@ public class CookManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

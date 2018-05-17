@@ -39,7 +39,9 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent" />
+
     <Switch
+        android:focusable="false"
         android:id="@+id/cook_manager_list_switch_status"
         android:paddingRight="30dp"
         android:layout_width="wrap_content"

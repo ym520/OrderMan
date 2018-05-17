@@ -15,14 +15,14 @@
         android:layout_height="50dp">
 
         <ImageButton
-            android:id="@+id/addCook_imageButton_back"
+            android:id="@+id/updateCook_imageButton_back"
             android:layout_width="0dp"
             android:layout_weight="0.2"
             android:background="@mipmap/back"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/addCook_textView_back"
-            android:text="返回"
+            android:id="@+id/updateCook_textView_back"
+            android:text="取消"
             android:paddingLeft="10dp"
             android:textSize="21sp"
             android:layout_width="0dp"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content" />
         <TextView
             android:gravity="center"
-            android:text="新增菜品"
+            android:text="菜品详情"
             android:textSize="22sp"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/addCook_linearLayout_camera"
+            android:id="@+id/updateCook_linearLayout_camera"
             android:orientation="vertical"
             android:gravity="center"
             android:layout_gravity="center"
@@ -68,13 +68,13 @@
             android:layout_width="300dp"
             android:layout_height="150dp">
             <ImageView
-                android:id="@+id/addCook_ImageView_cookImage"
+                android:id="@+id/updateCook_ImageView_cookImage"
                 android:src="@mipmap/camera_big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/addCook_textView_imageName"
+                android:id="@+id/updateCook_textView_imageName"
                 android:text="添加一张菜品图"
                 android:textSize="20sp"
                 android:gravity="center"
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/addCook_editText_cookName"
+            android:id="@+id/updateCook_editText_cookName"
             android:hint="添加菜品名称"
             android:maxLines="1"
             android:layout_width="match_parent"
@@ -122,7 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/addCook_editText_cookEnName"
+            android:id="@+id/updateCook_editText_cookEnName"
             android:hint="快速编码"
             android:maxLines="1"
             android:layout_width="match_parent"
@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/addCook_editText_cookPrice"
+            android:id="@+id/updateCook_editText_cookPrice"
             android:hint="请输入菜品价格"
             android:maxLines="1"
             android:layout_width="match_parent"
@@ -168,14 +168,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/addCook_editText_cookTypeName"
+            android:id="@+id/updateCook_editText_cookTypeName"
             android:hint="添加菜品分类"
             android:maxLines="1"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent" />
         <Spinner
-            android:id="@+id/addCook_Spinner_cookType"
+            android:id="@+id/updateCook_Spinner_cookType"
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="wrap_content">
@@ -199,7 +199,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
-            android:id="@+id/addCook_editText_cookUnits"
+            android:id="@+id/updateCook_editText_cookUnits"
             android:hint="添加菜品单位（如：份）"
             android:maxLines="1"
             android:layout_width="match_parent"
@@ -214,9 +214,9 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/addCook_button_sure"
+            android:id="@+id/updateCook_button_sure"
             android:textColor="#fff"
-            android:text="确定"
+            android:text="更新"
             android:textSize="20sp"
             android:layout_alignParentBottom="true"
             android:background="#E6912E"

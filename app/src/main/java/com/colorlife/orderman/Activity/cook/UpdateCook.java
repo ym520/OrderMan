@@ -1,7 +1,7 @@
 package com.colorlife.orderman.Activity.cook;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,13 +16,13 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.CookRequest;
 import com.colorlife.orderman.domain.CookTypeList;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
-import com.dou361.dialogui.DialogUIUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.compress.CompressConfig;
@@ -44,55 +44,72 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by ym on 2018/4/21.
+ * Created by ym on 2018/5/16.
  */
-@ContentView(R.layout.add_cook)
-public class AddCook extends TakePhotoActivity {
+@ContentView(R.layout.update_cook)
+public class UpdateCook extends TakePhotoActivity {
 
     private String TAG=this.toString();
-
-    @ViewInject(R.id.addCook_linearLayout_camera)
-    private LinearLayout doCamera;
-    @ViewInject(R.id.addCook_ImageView_cookImage)
-    private ImageView cookImage;
-    @ViewInject(R.id.addCook_textView_imageName)
-    private TextView imageName;
-    @ViewInject(R.id.addCook_button_sure)
-    private Button addCookTrue;
-    @ViewInject(R.id.addCook_Spinner_cookType)
-    private Spinner cookTypes;
+    private ImageOptions imageOptions;
 
     //菜名
-    @ViewInject(R.id.addCook_editText_cookName)
+    @ViewInject(R.id.updateCook_editText_cookName)
     private EditText cookName;
     //菜价
-    @ViewInject(R.id.addCook_editText_cookPrice)
+    @ViewInject(R.id.updateCook_editText_cookPrice)
     private EditText cookPrice;
     //菜类别名称
-    @ViewInject(R.id.addCook_editText_cookTypeName)
+    @ViewInject(R.id.updateCook_editText_cookTypeName)
     private EditText cookTypeName;
     //菜单位
-    @ViewInject(R.id.addCook_editText_cookUnits)
+    @ViewInject(R.id.updateCook_editText_cookUnits)
     private EditText cookUnits;
 
+    @ViewInject(R.id.updateCook_linearLayout_camera)
+    private LinearLayout doCamera;
+    @ViewInject(R.id.updateCook_ImageView_cookImage)
+    private ImageView cookImage;
+    @ViewInject(R.id.updateCook_textView_imageName)
+    private TextView imageName;
+    @ViewInject(R.id.updateCook_button_sure)
+    private Button updateCookTrue;
+    @ViewInject(R.id.updateCook_Spinner_cookType)
+    private Spinner cookTypes;
 
-    private CookRequest cookRequest=new CookRequest();
     private List<CookTypeList> list=new ArrayList<>();
     private List<String> listTypeName=new ArrayList<>();
     private ArrayAdapter<String> arr_adapter;
+    private CookRequest request=new CookRequest();
 
     private TakePhoto takePhoto;
     private CropOptions cropOptions;  //裁剪参数
     private CompressConfig compressConfig;  //压缩参数
-    private Uri imageUri;  //图片保存路径
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
         ActivityCollector.addActivity(this);
+        Intent intent=getIntent();
+        request= (CookRequest) intent.getSerializableExtra("cook");
+        if (request!=null){
+            cookName.setText(request.getName());
+            cookUnits.setText(request.getDescribe());
+            cookTypeName.setText(request.getTypeName());
+            cookPrice.setText(request.getPrice().toString());
+            //设置列表图片，网络的和本地上传的
+            if (request.getImageUrl()!=null && !"".equals(request.getImageUrl())){
+                //网络的
+                if (request.getImageUrl().contains("http")){
+                    x.image().bind(cookImage, request.getImageUrl(),getImageOptions());
+                }else {
+                    x.image().bind(cookImage, HttpUrl.downloadImage+request.getImageUrl().replaceAll("\\\\","%5C"),getImageOptions());
+                }
+            }
+
+        }
+
         initTakePhoto();
         //适配器
         arr_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listTypeName);
@@ -103,24 +120,29 @@ public class AddCook extends TakePhotoActivity {
         initData();
 
         cookTypes.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
+            public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
                 String name=listTypeName.get(arg2);
                 cookTypeName.setText(name);
                 for (CookTypeList l:list){
                     if (l.getTypeName().equals(name)){
-                        cookRequest.setTypeId(l.getId());
-                        cookRequest.setTypeName(name);
+                        request.setTypeId(l.getId());
+                        request.setTypeName(name);
                         break;
                     }
                 }
             }
-
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
+
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
     private void initData() {
         RequestParams params=new RequestParams(HttpUrl.findAllTypeCookUrl);
         //获取cookie
@@ -144,7 +166,7 @@ public class AddCook extends TakePhotoActivity {
                     arr_adapter.addAll(listTypeName);
                     arr_adapter.notifyDataSetChanged();
                 }else {
-                    ViewUtil.showToast(AddCook.this,msg);
+                    ViewUtil.showToast(UpdateCook.this,msg);
                     if (msg.equals("你当前没有登录！没有该权限")){
                         StatusUtil.isLogin=false;
                     }
@@ -176,44 +198,39 @@ public class AddCook extends TakePhotoActivity {
         });
     }
 
-    @Event(R.id.addCook_linearLayout_camera)
-    private void doCamera(View view){
-        takePhoto.onPickFromGallery();
-    }
-
-    //进行新增操作
-    @Event(R.id.addCook_button_sure)
-    private void doAddCook(final View view){
+    @Event(R.id.updateCook_button_sure)
+    private void doUpdate(View view){
         if (cookName.getText().toString().equals("") ||
                 cookTypeName.getText().toString().equals("") ||
                 cookPrice.getText().toString().equals("") ||
                 cookUnits.getText().toString().equals("")) {
-            ViewUtil.showToast(AddCook.this,"请填写完整数据！");
+            ViewUtil.showToast(UpdateCook.this,"请填写完整数据！");
         }else {
-            //cookRequest.setTypeName(cookTypeName.getText().toString());
-            cookRequest.setName(cookName.getText().toString());
-            cookRequest.setPrice(Double.valueOf(cookPrice.getText().toString()));
-            cookRequest.setStatus(1);
-            RequestParams params=new RequestParams(HttpUrl.addCookUrl);
+            request.setName(cookName.getText().toString());
+            request.setPrice(Double.valueOf(cookPrice.getText().toString()));
+            RequestParams params=new RequestParams(HttpUrl.updateCookUrl);
             params.setAsJsonContent(true);
             //获取cookie
             SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
             String cookie=sp2.getString("JSESSIONID","");
             params.addHeader("Cookie","JSESSIONID="+cookie);
-            params.setBodyContent(JSON.toJSONString(cookRequest));
-            DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+            params.setBodyContent(JSON.toJSONString(request));
+
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
-                    DialogUIUtils.dismiss();
                     String code= JSON.parseObject(result).getString("code");
                     String msg=JSON.parseObject(result).getString("msg");
+                    String data=JSON.parseObject(result).getString("data");
                     if (code.equals("10000")){
-                        ViewUtil.showToast(AddCook.this,msg);
+                        ViewUtil.showToast(UpdateCook.this,data);
                     }else {
-                        ViewUtil.showToast(AddCook.this,msg);
+                        ViewUtil.showToast(UpdateCook.this,msg);
                         if (msg.equals("你当前没有登录！没有该权限")){
                             StatusUtil.isLogin=false;
+                            Intent intent=new Intent(UpdateCook.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     }
                 }
@@ -223,7 +240,6 @@ public class AddCook extends TakePhotoActivity {
                 }
                 @Override
                 public void onError(Throwable ex, boolean isOnCallback) {
-                    DialogUIUtils.dismiss();
                     Log.d(TAG, "onError: "+ex.getMessage());
                     if (ex instanceof HttpException) { // 网络错误
                         HttpException httpEx = (HttpException) ex;
@@ -244,6 +260,18 @@ public class AddCook extends TakePhotoActivity {
             });
         }
 
+    }
+
+    @Event(value = {R.id.updateCook_imageButton_back,R.id.updateCook_textView_back})
+    private void doBack(View view){
+        Intent intent=new Intent(UpdateCook.this,CookManager.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Event(R.id.updateCook_linearLayout_camera)
+    private void doCamera(View view){
+        takePhoto.onPickFromGallery();
     }
 
     @Override
@@ -285,10 +313,10 @@ public class AddCook extends TakePhotoActivity {
                         String msg=JSON.parseObject(result).getString("msg");
                         String url=JSON.parseObject(result).getString("data");
                         if (code.equals("10000")){
-                            cookRequest.setImageUrl(url);
-                            ViewUtil.showToast(AddCook.this,"图片上传成功！");
+                            request.setImageUrl(url);
+                            ViewUtil.showToast(UpdateCook.this,"图片上传成功！");
                         }else {
-                            ViewUtil.showToast(AddCook.this,msg);
+                            ViewUtil.showToast(UpdateCook.this,msg);
                         }
                     }
                     @Override
@@ -319,13 +347,6 @@ public class AddCook extends TakePhotoActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
-    }
-
-
     //初始化TakePhoto
     private void initTakePhoto() {
         ////获取TakePhoto实例
@@ -335,5 +356,22 @@ public class AddCook extends TakePhotoActivity {
         //设置压缩参数
         compressConfig=new CompressConfig.Builder().setMaxSize(50*1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig,true);  //设置为需要压缩
+    }
+
+    //设置图片显示参数
+    public ImageOptions getImageOptions(){
+        if (imageOptions!=null){
+            return imageOptions;
+        }else {
+            imageOptions = new ImageOptions.Builder()
+                    .setSize(DensityUtil.dip2px(300), DensityUtil.dip2px(150))//图片大小
+                    .setRadius(DensityUtil.dip2px(5))//ImageView圆角半径
+                    .setCrop(true)// 如果ImageView的大小不是定义为wrap_content, 不要crop.
+                    .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                    .setLoadingDrawableId(R.mipmap.ic_launcher)//加载中默认显示图片
+                    .setFailureDrawableId(R.mipmap.ic_launcher)//加载失败后默认显示图片
+                    .build();
+            return imageOptions;
+        }
     }
 }

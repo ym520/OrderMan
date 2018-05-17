@@ -1,10 +1,12 @@
 package com.colorlife.orderman.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by ym on 2018/4/27.
  */
 
-public class CookRequest {
+public class CookRequest implements Serializable {
 
     private Integer id;
 

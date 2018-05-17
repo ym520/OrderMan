@@ -44,6 +44,7 @@ import com.colorlife.orderman.domain.OrderRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
+import com.dou361.dialogui.DialogUIUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 
@@ -355,6 +356,7 @@ public class NoDeskOrder extends AppCompatActivity {
         params.addParameter("typeId",StatusUtil.cookTypeId);
         params.addParameter("keyWord",keyWord);
 
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -388,6 +390,7 @@ public class NoDeskOrder extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
@@ -432,7 +435,7 @@ public class NoDeskOrder extends AppCompatActivity {
         SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
         String cookie=sp2.getString("JSESSIONID","");
         params.addHeader("Cookie","JSESSIONID="+cookie);
-
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -464,6 +467,7 @@ public class NoDeskOrder extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

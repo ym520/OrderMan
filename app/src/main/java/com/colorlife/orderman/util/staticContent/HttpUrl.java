@@ -39,6 +39,8 @@ public class HttpUrl {
     public static String findAllDeskUrl=realUrl+"desk/findAllDesk";
     public static String closeOrOpenDeskUrl=realUrl+"desk/closeOrOpenDesk";
     public static String addDeskUrl=realUrl+"desk/add";
+    public static String closeOrOpenCookUrl=realUrl+"cook/closeOrOpenCook";
+    public static String updateCookUrl=realUrl+"cook/update";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)

@@ -34,6 +34,7 @@ import com.colorlife.orderman.domain.OrderRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
+import com.dou361.dialogui.DialogUIUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
@@ -205,7 +206,7 @@ public class OrderDetail extends AppCompatActivity {
         String cookie=sp2.getString("JSESSIONID","");
         params.addHeader("Cookie","JSESSIONID="+cookie);
         params.addParameter("id",id);
-
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -251,6 +252,7 @@ public class OrderDetail extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

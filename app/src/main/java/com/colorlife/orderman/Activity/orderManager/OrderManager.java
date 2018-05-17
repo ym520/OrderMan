@@ -23,6 +23,7 @@ import com.colorlife.orderman.domain.OrderListVo;
 import com.colorlife.orderman.domain.OrderRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
+import com.dou361.dialogui.DialogUIUtils;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 
@@ -132,6 +133,7 @@ public class OrderManager extends AppCompatActivity {
         requestParams.addParameter("status",status);
         requestParams.addParameter("type",type);
         requestParams.addParameter("keyword",keyword);
+        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -163,6 +165,7 @@ public class OrderManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                DialogUIUtils.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

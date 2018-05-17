@@ -15,6 +15,7 @@ import com.colorlife.orderman.R;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
+import com.dou361.dialogui.DialogUIUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
@@ -66,6 +67,7 @@ public class LoginActivity extends BaseActivity {
             params.addParameter("password",password);
             Log.d("login","进入发送post请求");
             //发送登录请求
+            DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -122,6 +124,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 @Override
                 public void onFinished() {
+                    DialogUIUtils.dismiss();
                     Log.d(TAG, "onFinished: 请求完成！");
                 }
             });

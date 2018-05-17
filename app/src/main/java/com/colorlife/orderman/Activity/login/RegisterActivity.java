@@ -12,6 +12,7 @@ import com.colorlife.orderman.Activity.base.BaseActivity;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
+import com.dou361.dialogui.DialogUIUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
@@ -74,6 +75,7 @@ public class RegisterActivity extends BaseActivity {
                 params.addParameter("createTime","");
                 params.addParameter("modifyTime","");
 
+                DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
@@ -109,6 +111,7 @@ public class RegisterActivity extends BaseActivity {
                     }
                     @Override
                     public void onFinished() {
+                        DialogUIUtils.dismiss();
                         Log.d(TAG, "onFinished: 请求完成！");
                     }
                 });
