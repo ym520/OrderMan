@@ -93,7 +93,7 @@
             <TextView
                 android:id="@+id/noDeskOrder_textView_sellCount"
                 android:gravity="center"
-                android:text="200.00"
+                android:text="0.00"
                 android:textStyle="bold"
                 android:textColor="#fff"
                 android:textSize="20sp"

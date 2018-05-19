@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -132,6 +133,7 @@ public class DeskListAdapter extends RecyclerView.Adapter<DeskListAdapter.ViewHo
                     String cookie=sp2.getString("JSESSIONID","");
                     requestParams.addHeader("Cookie","JSESSIONID="+cookie);
                     requestParams.addParameter("id",deskList.getId());
+                    final Dialog dialog = DialogUIUtils.showLoadingHorizontal(context,"数据加载中。。。",true).show();
                     x.http().get(requestParams, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
@@ -157,6 +159,7 @@ public class DeskListAdapter extends RecyclerView.Adapter<DeskListAdapter.ViewHo
                         }
                         @Override
                         public void onFinished() {
+                            dialog.dismiss();
                             Log.d(TAG, "onFinished: 请求完成！");
                         }
                         @Override

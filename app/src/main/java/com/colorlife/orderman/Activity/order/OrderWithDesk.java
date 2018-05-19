@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.order;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -126,7 +127,7 @@ public class OrderWithDesk extends AppCompatActivity {
         params.addParameter("pn",pn);
         params.addParameter("pageSize",30);
         params.addParameter("status",status);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -160,7 +161,7 @@ public class OrderWithDesk extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

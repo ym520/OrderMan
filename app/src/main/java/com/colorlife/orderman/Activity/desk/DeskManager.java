@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.desk;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -130,7 +131,7 @@ public class DeskManager extends AppCompatActivity {
         requestParams.addParameter("pn",pn);
         requestParams.addParameter("pageSize",20);
         requestParams.addParameter("status",status);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -162,7 +163,7 @@ public class DeskManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
@@ -201,7 +202,7 @@ public class DeskManager extends AppCompatActivity {
         requestParams.addHeader("Cookie","JSESSIONID="+cookie);
         requestParams.addParameter("id",id);
         requestParams.addParameter("opt",opt);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -223,7 +224,7 @@ public class DeskManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

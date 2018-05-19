@@ -1,5 +1,7 @@
 package com.colorlife.orderman.Activity.cook;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.desk.AddDesk;
+import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.CookRequest;
 import com.colorlife.orderman.domain.CookTypeList;
@@ -201,11 +205,11 @@ public class AddCook extends TakePhotoActivity {
             String cookie=sp2.getString("JSESSIONID","");
             params.addHeader("Cookie","JSESSIONID="+cookie);
             params.setBodyContent(JSON.toJSONString(cookRequest));
-            DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+            final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据上传中。。。",true).show();
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
-                    DialogUIUtils.dismiss();
+                    dialog.dismiss();
                     String code= JSON.parseObject(result).getString("code");
                     String msg=JSON.parseObject(result).getString("msg");
                     if (code.equals("10000")){
@@ -214,11 +218,15 @@ public class AddCook extends TakePhotoActivity {
                         ViewUtil.showToast(AddCook.this,msg);
                         if (msg.equals("你当前没有登录！没有该权限")){
                             StatusUtil.isLogin=false;
+                            Intent intent=new Intent(AddCook.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         }
                     }
                 }
                 @Override
                 public void onFinished() {
+                    dialog.dismiss();
                     Log.d(TAG, "onFinished: 请求完成！");
                 }
                 @Override
@@ -277,6 +285,7 @@ public class AddCook extends TakePhotoActivity {
                 params.setMultipart(true);
                 params.addBodyParameter("file", new File(u.getCompressPath()));
                 params.addParameter("inputId","file");
+                final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"图片上传中。。。",true).show();
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -286,6 +295,7 @@ public class AddCook extends TakePhotoActivity {
                         String url=JSON.parseObject(result).getString("data");
                         if (code.equals("10000")){
                             cookRequest.setImageUrl(url);
+                            dialog.dismiss();
                             ViewUtil.showToast(AddCook.this,"图片上传成功！");
                         }else {
                             ViewUtil.showToast(AddCook.this,msg);
@@ -293,6 +303,7 @@ public class AddCook extends TakePhotoActivity {
                     }
                     @Override
                     public void onFinished() {
+                        dialog.dismiss();
                         Log.d(TAG, "onFinished: 请求完成！");
                     }
                     @Override

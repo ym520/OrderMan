@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.login;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -75,7 +76,7 @@ public class RegisterActivity extends BaseActivity {
                 params.addParameter("createTime","");
                 params.addParameter("modifyTime","");
 
-                DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+                final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
@@ -111,7 +112,7 @@ public class RegisterActivity extends BaseActivity {
                     }
                     @Override
                     public void onFinished() {
-                        DialogUIUtils.dismiss();
+                        dialog.dismiss();
                         Log.d(TAG, "onFinished: 请求完成！");
                     }
                 });

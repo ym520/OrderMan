@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.orderManager;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -133,7 +134,7 @@ public class OrderManager extends AppCompatActivity {
         requestParams.addParameter("status",status);
         requestParams.addParameter("type",type);
         requestParams.addParameter("keyword",keyword);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -165,7 +166,7 @@ public class OrderManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

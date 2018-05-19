@@ -1,6 +1,7 @@
 package com.colorlife.orderman.Activity.order;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +46,7 @@ import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
 import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.config.BuildBean;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 
@@ -356,7 +358,7 @@ public class NoDeskOrder extends AppCompatActivity {
         params.addParameter("typeId",StatusUtil.cookTypeId);
         params.addParameter("keyWord",keyWord);
 
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -390,7 +392,7 @@ public class NoDeskOrder extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
@@ -435,7 +437,7 @@ public class NoDeskOrder extends AppCompatActivity {
         SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
         String cookie=sp2.getString("JSESSIONID","");
         params.addHeader("Cookie","JSESSIONID="+cookie);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -467,7 +469,7 @@ public class NoDeskOrder extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+               dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
@@ -533,7 +535,7 @@ public class NoDeskOrder extends AppCompatActivity {
         params.addHeader("Cookie","JSESSIONID="+cookie);
         params.setBodyContent(JSON.toJSONString(orderRequest));
         final int[] orderId = new int[1];
-
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -559,6 +561,7 @@ public class NoDeskOrder extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

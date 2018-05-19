@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.cook;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.colorlife.orderman.domain.CookTypeList;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
+import com.dou361.dialogui.DialogUIUtils;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoActivity;
 import com.jph.takephoto.compress.CompressConfig;
@@ -215,7 +217,7 @@ public class UpdateCook extends TakePhotoActivity {
             String cookie=sp2.getString("JSESSIONID","");
             params.addHeader("Cookie","JSESSIONID="+cookie);
             params.setBodyContent(JSON.toJSONString(request));
-
+            final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据更新中。。。",true).show();
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -236,6 +238,7 @@ public class UpdateCook extends TakePhotoActivity {
                 }
                 @Override
                 public void onFinished() {
+                    dialog.dismiss();
                     Log.d(TAG, "onFinished: 请求完成！");
                 }
                 @Override
@@ -305,6 +308,7 @@ public class UpdateCook extends TakePhotoActivity {
                 params.setMultipart(true);
                 params.addBodyParameter("file", new File(u.getCompressPath()));
                 params.addParameter("inputId","file");
+                final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"图片上传中。。。",true).show();
                 x.http().post(params, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -312,6 +316,7 @@ public class UpdateCook extends TakePhotoActivity {
                         String code=JSON.parseObject(result).getString("code");
                         String msg=JSON.parseObject(result).getString("msg");
                         String url=JSON.parseObject(result).getString("data");
+                        dialog.dismiss();
                         if (code.equals("10000")){
                             request.setImageUrl(url);
                             ViewUtil.showToast(UpdateCook.this,"图片上传成功！");
@@ -321,6 +326,7 @@ public class UpdateCook extends TakePhotoActivity {
                     }
                     @Override
                     public void onFinished() {
+                        dialog.dismiss();
                         Log.d(TAG, "onFinished: 请求完成！");
                     }
                     @Override

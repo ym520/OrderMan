@@ -1,6 +1,7 @@
 package com.colorlife.orderman.Activity.orderDetail;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -206,7 +207,7 @@ public class OrderDetail extends AppCompatActivity {
         String cookie=sp2.getString("JSESSIONID","");
         params.addHeader("Cookie","JSESSIONID="+cookie);
         params.addParameter("id",id);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -252,7 +253,7 @@ public class OrderDetail extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override

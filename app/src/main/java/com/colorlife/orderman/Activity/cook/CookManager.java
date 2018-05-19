@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.cook;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -189,7 +190,6 @@ public class CookManager extends AppCompatActivity {
         SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
         String cookie=sp2.getString("JSESSIONID","");
         params.addHeader("Cookie","JSESSIONID="+cookie);
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -213,6 +213,9 @@ public class CookManager extends AppCompatActivity {
                     ViewUtil.showToast(CookManager.this,msg);
                     if (msg.equals("你当前没有登录！没有该权限")){
                         StatusUtil.isLogin=false;
+                        Intent intent=new Intent(CookManager.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }
@@ -255,7 +258,7 @@ public class CookManager extends AppCompatActivity {
         params.addParameter("typeId",cookTypeId);
         params.addParameter("keyWord",keyWord);
         Log.d(TAG, "initCookData: params"+params.toString());
-        DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -296,7 +299,7 @@ public class CookManager extends AppCompatActivity {
             }
             @Override
             public void onFinished() {
-                DialogUIUtils.dismiss();
+                dialog.dismiss();
                 Log.d(TAG, "onFinished: 请求完成！");
             }
             @Override
