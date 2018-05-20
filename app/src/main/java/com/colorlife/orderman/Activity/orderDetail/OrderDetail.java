@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -26,8 +27,10 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.colorlife.orderman.Activity.base.ActivityCollector;
+import com.colorlife.orderman.Activity.login.LoginActivity;
 import com.colorlife.orderman.Activity.order.NoDeskOrder;
 import com.colorlife.orderman.Activity.orderManager.CheckOutOrder;
+import com.colorlife.orderman.Activity.orderManager.OrderManager;
 import com.colorlife.orderman.Adapter.OrderDetailAdapter;
 import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.OrderDetailRequest;
@@ -36,6 +39,7 @@ import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
 import com.colorlife.orderman.util.staticContent.StatusUtil;
 import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.listener.DialogUIListener;
 
 import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
@@ -172,6 +176,65 @@ public class OrderDetail extends AppCompatActivity {
             }
         });
 
+        undoOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                undoOrder();
+            }
+        });
+
+        bindDesk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogUIUtils.showAlertInput(OrderDetail.this, "绑定桌位", "请输入进餐人数", "请输入桌位数字编号", "绑定", "取消", new DialogUIListener() {
+                    @Override
+                    public void onPositive() {
+
+                    }
+
+                    @Override
+                    public void onNegative() {
+                        
+                    }
+
+                    @Override
+                    public void onGetInput(CharSequence input1, CharSequence input2) {
+                        Log.d(TAG, "onGetInput: input1:"+input1.toString()+" input2:"+input2.toString());
+                        orderRequest.setPersonCount(Integer.valueOf(input1.toString()));
+                        orderRequest.setDeskId(Integer.valueOf(input2.toString()));
+                        bindOrder();
+                    }
+                }).show();
+            }
+        });
+
+
+        changeDesk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogUIUtils.showAlertInput(OrderDetail.this, "改变桌位 原桌位为:"+orderRequest.getDeskName(), null, "请输入新桌位数字编号", "绑定", "取消", new DialogUIListener() {
+                    @Override
+                    public void onPositive() {
+
+                    }
+
+                    @Override
+                    public void onNegative() {
+
+                    }
+
+                    @Override
+                    public void onGetInput(CharSequence input1, CharSequence input2) {
+                        Log.d(TAG, "onGetInput: input1:"+input1.toString()+" input2:"+input2.toString());
+                        orderRequest.setDeskId(Integer.valueOf(input2.toString()));
+                        bindOrder();
+                    }
+                }).show();
+            }
+        });
+
+
+
     }
 
     /**
@@ -228,7 +291,11 @@ public class OrderDetail extends AppCompatActivity {
                         //设置下单时间
                         orderTime.setText(orderRequest.getCreateTime());
                         //设置人数
-                        orderPearsonCount.setText("人数： "+orderRequest.getPersonCount());
+                        if (orderRequest.getPersonCount()==null || orderRequest.getPersonCount()==0){
+                            orderPearsonCount.setText("人数： 无");
+                        }else {
+                            orderPearsonCount.setText("人数： "+orderRequest.getPersonCount());
+                        }
                         if (orderRequest.getStatus()==2){
                             Order.setVisibility(View.INVISIBLE);
                             moreMenu.setVisibility(View.INVISIBLE);
@@ -248,6 +315,196 @@ public class OrderDetail extends AppCompatActivity {
                     ViewUtil.showToast(OrderDetail.this,msg);
                     if (msg.equals("你当前没有登录！没有该权限")){
                         StatusUtil.isLogin=false;
+                    }
+                }
+            }
+            @Override
+            public void onFinished() {
+                dialog.dismiss();
+                Log.d(TAG, "onFinished: 请求完成！");
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.d(TAG, "onError: "+ex.getMessage().toString());
+                if (ex.getMessage()!=null && !"".equals(ex.getMessage())){
+                    if (ex.getMessage().contains("failed to connect")){
+                        ViewUtil.showToast(OrderDetail.this,"网络连接有问题，请您切换到流畅网络。");
+                    }
+                }
+                if (ex instanceof HttpException) { // 网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                    Log.d(TAG, "onError: responseCode:"+responseCode);
+                    Log.d(TAG, "onError: responseMsg:"+responseMsg);
+                    Log.d(TAG, "onError: errorResult:"+errorResult);
+                } else { // 其他错误
+                    // ...
+                }
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Log.d(TAG, "onCancelled: "+cex.getMessage().toString());
+            }
+        });
+    }
+
+
+    //撤销订单
+    private void undoOrder(){
+        RequestParams params=new RequestParams(HttpUrl.undoOrderUrl);
+        //获取cookie
+        SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
+        String cookie=sp2.getString("JSESSIONID","");
+        params.addHeader("Cookie","JSESSIONID="+cookie);
+        params.setAsJsonContent(true);
+        params.setBodyContent(JSON.toJSONString(orderRequest));
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"请求操作中。。。",true).show();
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                String code= JSON.parseObject(result).getString("code");
+                String msg=JSON.parseObject(result).getString("msg");
+                String data=JSON.parseObject(result).getString("data");
+                if (code.equals("10000")){
+                    dialog.dismiss();
+                    ViewUtil.showToast(OrderDetail.this,data);
+                    Intent intent=new Intent(OrderDetail.this, OrderManager.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    ViewUtil.showToast(OrderDetail.this,msg);
+                    if (msg.equals("你当前没有登录！没有该权限")){
+                        StatusUtil.isLogin=false;
+                        Intent intent=new Intent(OrderDetail.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+            @Override
+            public void onFinished() {
+                dialog.dismiss();
+                Log.d(TAG, "onFinished: 请求完成！");
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.d(TAG, "onError: "+ex.getMessage().toString());
+                if (ex.getMessage()!=null && !"".equals(ex.getMessage())){
+                    if (ex.getMessage().contains("failed to connect")){
+                        ViewUtil.showToast(OrderDetail.this,"网络连接有问题，请您切换到流畅网络。");
+                    }
+                }
+                if (ex instanceof HttpException) { // 网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                    Log.d(TAG, "onError: responseCode:"+responseCode);
+                    Log.d(TAG, "onError: responseMsg:"+responseMsg);
+                    Log.d(TAG, "onError: errorResult:"+errorResult);
+                } else { // 其他错误
+                    // ...
+                }
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Log.d(TAG, "onCancelled: "+cex.getMessage().toString());
+            }
+        });
+
+    }
+
+    //绑定桌位
+    private void bindOrder(){
+        RequestParams params=new RequestParams(HttpUrl.bindOrderURl);
+        //获取cookie
+        SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
+        String cookie=sp2.getString("JSESSIONID","");
+        params.addHeader("Cookie","JSESSIONID="+cookie);
+        params.setAsJsonContent(true);
+        params.setBodyContent(JSON.toJSONString(orderRequest));
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"请求操作中。。。",true).show();
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                String code= JSON.parseObject(result).getString("code");
+                String msg=JSON.parseObject(result).getString("msg");
+                String data=JSON.parseObject(result).getString("data");
+                if (code.equals("10000")){
+                    dialog.dismiss();
+                    ViewUtil.showToast(OrderDetail.this,data);
+                    initData(id);
+                }else {
+                    ViewUtil.showToast(OrderDetail.this,msg);
+                    if (msg.equals("你当前没有登录！没有该权限")){
+                        StatusUtil.isLogin=false;
+                        Intent intent=new Intent(OrderDetail.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+            @Override
+            public void onFinished() {
+                dialog.dismiss();
+                Log.d(TAG, "onFinished: 请求完成！");
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.d(TAG, "onError: "+ex.getMessage().toString());
+                if (ex.getMessage()!=null && !"".equals(ex.getMessage())){
+                    if (ex.getMessage().contains("failed to connect")){
+                        ViewUtil.showToast(OrderDetail.this,"网络连接有问题，请您切换到流畅网络。");
+                    }
+                }
+                if (ex instanceof HttpException) { // 网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                    Log.d(TAG, "onError: responseCode:"+responseCode);
+                    Log.d(TAG, "onError: responseMsg:"+responseMsg);
+                    Log.d(TAG, "onError: errorResult:"+errorResult);
+                } else { // 其他错误
+                    // ...
+                }
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Log.d(TAG, "onCancelled: "+cex.getMessage().toString());
+            }
+        });
+    }
+
+    //改变桌位
+    private void changeDesk(){
+        RequestParams params=new RequestParams(HttpUrl.changeDeskURl);
+        //获取cookie
+        SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
+        String cookie=sp2.getString("JSESSIONID","");
+        params.addHeader("Cookie","JSESSIONID="+cookie);
+        params.setAsJsonContent(true);
+        params.setBodyContent(JSON.toJSONString(orderRequest));
+        final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"请求操作中。。。",true).show();
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                String code= JSON.parseObject(result).getString("code");
+                String msg=JSON.parseObject(result).getString("msg");
+                String data=JSON.parseObject(result).getString("data");
+                if (code.equals("10000")){
+                    dialog.dismiss();
+                    ViewUtil.showToast(OrderDetail.this,data);
+                    initData(id);
+                }else {
+                    ViewUtil.showToast(OrderDetail.this,msg);
+                    if (msg.equals("你当前没有登录！没有该权限")){
+                        StatusUtil.isLogin=false;
+                        Intent intent=new Intent(OrderDetail.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }

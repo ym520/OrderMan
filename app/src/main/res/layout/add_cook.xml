@@ -52,6 +52,11 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <TextView
+        android:background="#c3c1c1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
@@ -83,10 +88,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:background="#c3c1c1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
     <LinearLayout
         android:paddingLeft="20dp"
         android:gravity="center_vertical"
@@ -101,6 +102,7 @@
         <EditText
             android:id="@+id/addCook_editText_cookName"
             android:hint="添加菜品名称"
+            android:textColorHint="#a9a3a3"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -124,6 +126,7 @@
         <EditText
             android:id="@+id/addCook_editText_cookEnName"
             android:hint="快速编码"
+            android:textColorHint="#a9a3a3"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -147,6 +150,7 @@
         <EditText
             android:id="@+id/addCook_editText_cookPrice"
             android:hint="请输入菜品价格"
+            android:textColorHint="#a9a3a3"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -170,6 +174,7 @@
         <EditText
             android:id="@+id/addCook_editText_cookTypeName"
             android:hint="添加菜品分类"
+            android:textColorHint="#a9a3a3"
             android:maxLines="1"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -201,6 +206,7 @@
         <EditText
             android:id="@+id/addCook_editText_cookUnits"
             android:hint="添加菜品单位（如：份）"
+            android:textColorHint="#a9a3a3"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

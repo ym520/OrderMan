@@ -104,25 +104,26 @@ public class DeskListAdapter extends RecyclerView.Adapter<DeskListAdapter.ViewHo
             public void onClick(View view) {
                 if (deskList.getStatus()==1){
                     order = new OrderRequest();
-                    DialogUIUtils.showAlertInput(context, "开台  " + deskList.getCode(), null, "人数", "取消", "确定", true, false, new DialogUIListener() {
+                    DialogUIUtils.showAlertInput(context, "开台  " + deskList.getCode(), null, "人数", "确定", "取消", true, false, new DialogUIListener() {
                         @Override
                         public void onPositive() {
-                            //取消
 
                         }
                         @Override
                         public void onNegative() {
-                            //确定
-                            order.setDeskId(deskList.getId());
-                            order.setDeskName(deskList.getCode());
-                            intent = new Intent(context, NoDeskOrder.class);
-                            intent.putExtra("order", order);
-                            context.startActivity(intent);
+
                         }
                         @Override
                         public void onGetInput(CharSequence input1, CharSequence input2) {
+                            Log.d(TAG, "onGetInput: input1:"+input1.toString()+" input2:"+input2.toString());
                             if (input2.toString()!=null && !"".equals(input2.toString())){
                                 order.setPersonCount(Integer.valueOf(input2.toString()));
+                                //确定
+                                order.setDeskId(deskList.getId());
+                                order.setDeskName(deskList.getCode());
+                                intent = new Intent(context, NoDeskOrder.class);
+                                intent.putExtra("order", order);
+                                context.startActivity(intent);
                             }
                         }
                     }).show();

@@ -74,11 +74,11 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0.5"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="用户名:"
@@ -91,18 +91,19 @@
                     <EditText
                         android:id="@+id/editText_register_userName"
                         android:layout_width="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:background="@drawable/bg_edittext"
                         android:layout_height="match_parent" />
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -112,11 +113,11 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0.5"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="密    码:"
@@ -128,18 +129,19 @@
                     <EditText
                         android:id="@+id/editText_register_password"
                         android:layout_width="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:inputType="textPassword"
                         android:background="@drawable/bg_edittext"
                         android:layout_height="match_parent" />
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -149,11 +151,11 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0.5"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="确认密码:"
@@ -165,18 +167,19 @@
                     <EditText
                         android:id="@+id/editText_register_confirmPassword"
                         android:layout_width="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:inputType="textPassword"
                         android:background="@drawable/bg_edittext"
                         android:layout_height="match_parent" />
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -186,11 +189,11 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0.5"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="手机号:"
@@ -202,18 +205,19 @@
                     <EditText
                         android:id="@+id/editText_register_phone"
                         android:layout_width="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:inputType="phone"
                         android:background="@drawable/bg_edittext"
                         android:layout_height="match_parent" />
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -223,11 +227,11 @@
                     android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
+                    android:layout_height="50dp">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="0.5"
                         android:layout_height="wrap_content" />
                     <TextView
                         android:text="店铺名:"
@@ -239,12 +243,12 @@
                     <EditText
                         android:id="@+id/editText_register_shopName"
                         android:layout_width="0dp"
-                        android:layout_weight="3"
+                        android:layout_weight="4"
                         android:background="@drawable/bg_edittext"
                         android:layout_height="match_parent" />
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 

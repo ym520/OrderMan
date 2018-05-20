@@ -41,6 +41,10 @@ public class HttpUrl {
     public static String addDeskUrl=realUrl+"desk/add";
     public static String closeOrOpenCookUrl=realUrl+"cook/closeOrOpenCook";
     public static String updateCookUrl=realUrl+"cook/update";
+    public static String addCookTypeUrl=realUrl+"cookType/addCookType";
+    public static String undoOrderUrl=realUrl+"order/Withdraw";
+    public static String bindOrderURl=realUrl+"order/bindDesk";
+    public static String changeDeskURl=realUrl+"order/changeDesk";
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager)

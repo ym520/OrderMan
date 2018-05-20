@@ -68,6 +68,8 @@ public class CookManager extends AppCompatActivity {
     private String keyWord="";
     private Integer cookTypeId=0;
 
+    CookTypeList cookType=new CookTypeList();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,32 +138,90 @@ public class CookManager extends AppCompatActivity {
         DialogUIUtils.showBottomSheetAndCancel(this, stringList, "取消", new DialogUIItemListener() {
             @Override
             public void onItemClick(CharSequence text, int position) {
+                //菜品类型
                 if (position==0){
                     Log.d(TAG, "onItemClick: 0");
-                    DialogUIUtils.showAlertInput(CookManager.this, "新增菜品类型", null, "菜品类型名称", "取消", "确定", new DialogUIListener() {
-                        @Override
-                        public void onPositive() {
-
-                        }
-
+                    DialogUIUtils.showAlertInput(CookManager.this, "新增菜品类型", null, "菜品类型名称", "确定", "取消", new DialogUIListener() {
                         @Override
                         public void onNegative() {
 
                         }
 
                         @Override
-                        public void onGetInput(CharSequence input1, CharSequence input2) {
-                            super.onGetInput(input1, input2);
+                        public void onPositive() {
 
                         }
-                    });
+
+                        @Override
+                        public void onGetInput(CharSequence input1, CharSequence input2) {
+                            Log.d(TAG, "onGetInput: input1:"+input1.toString()+" input2:"+input2.toString());
+                            cookType.setTypeName(input2.toString());
+                            cookType.setStatus(1);
+                            RequestParams params=new RequestParams(HttpUrl.addCookTypeUrl);
+                            params.setAsJsonContent(true);
+                            //获取cookie
+                            SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);
+                            String cookie=sp2.getString("JSESSIONID","");
+                            params.addHeader("Cookie","JSESSIONID="+cookie);
+                            params.setBodyContent(JSON.toJSONString(cookType));
+                            final Dialog dialog = DialogUIUtils.showLoadingHorizontal(CookManager.this,"数据上传中。。。",true).show();
+                            x.http().post(params, new Callback.CommonCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    dialog.dismiss();
+                                    String code= JSON.parseObject(result).getString("code");
+                                    String msg=JSON.parseObject(result).getString("msg");
+                                    if (code.equals("10000")){
+                                        ViewUtil.showToast(CookManager.this,msg);
+                                        initCookTypeData();
+                                        initCookData();
+                                    }else {
+                                        ViewUtil.showToast(CookManager.this,msg);
+                                        if (msg.equals("你当前没有登录！没有该权限")){
+                                            StatusUtil.isLogin=false;
+                                            Intent intent=new Intent(CookManager.this, LoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onFinished() {
+                                    dialog.dismiss();
+                                    Log.d(TAG, "onFinished: 请求完成！");
+                                }
+                                @Override
+                                public void onError(Throwable ex, boolean isOnCallback) {
+                                    DialogUIUtils.dismiss();
+                                    Log.d(TAG, "onError: "+ex.getMessage());
+                                    if (ex instanceof HttpException) { // 网络错误
+                                        HttpException httpEx = (HttpException) ex;
+                                        int responseCode = httpEx.getCode();
+                                        String responseMsg = httpEx.getMessage();
+                                        String errorResult = httpEx.getResult();
+                                        Log.d(TAG, "onError: responseCode:"+responseCode);
+                                        Log.d(TAG, "onError: responseMsg:"+responseMsg);
+                                        Log.d(TAG, "onError: errorResult:"+errorResult);
+                                    } else { // 其他错误
+                                        // ...
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(CancelledException cex) {
+                                    Log.d(TAG, "onCancelled: "+cex.getMessage().toString());
+                                }
+                            });
+                        }
+                    }).show();
+                    //菜品
                 }else if (position==1){
                     Log.d(TAG, "onItemClick: 1");
+                    Intent intent=new Intent(CookManager.this, AddCook.class);
+                    startActivity(intent);
                 }
             }
-        });
-        Intent intent=new Intent(CookManager.this, AddCook.class);
-        startActivity(intent);
+        }).show();
+
     }
     //返回
     @Event(R.id.cookManager_imageButton_back)
@@ -175,6 +235,13 @@ public class CookManager extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollector.removeActivity(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initCookData();
+        initCookTypeData();
     }
 
     //初始化菜品类型数据
@@ -196,6 +263,7 @@ public class CookManager extends AppCompatActivity {
                 String code= JSON.parseObject(result).getString("code");
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
+                    cookTypeList.clear();
                     List<CookTypeList> List=JSON.parseArray(JSON.parseObject(result).getString("data"),CookTypeList.class);
                     if (List.size()>0){
                         for (CookTypeList i:List){

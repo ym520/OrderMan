@@ -122,7 +122,7 @@ public class OrderManager extends AppCompatActivity {
         });
     }
 
-    private void initData(final Integer pn, Integer status, Integer type, String keyword){
+    private void initData(final Integer pn, Integer status, final Integer type, String keyword){
         RequestParams requestParams=new RequestParams(HttpUrl.orderManagetUrl);
         //获取cookie
         SharedPreferences sp2 = getSharedPreferences("cookie", MODE_PRIVATE);

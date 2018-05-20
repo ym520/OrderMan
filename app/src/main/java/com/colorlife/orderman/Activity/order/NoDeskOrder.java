@@ -336,6 +336,7 @@ public class NoDeskOrder extends AppCompatActivity {
         if (request.getDeskId()==null || "".equals(request.getDeskId())){
             request.setDeskName("无桌位");
             request.setDeskId(0);
+            request.setPersonCount(0);
         }
         request.setNumber(System.currentTimeMillis()+"");
         request.setId(0);
@@ -365,6 +366,7 @@ public class NoDeskOrder extends AppCompatActivity {
                 String code= JSON.parseObject(result).getString("code");
                 String msg=JSON.parseObject(result).getString("msg");
                 if (code.equals("10000")){
+                    cookList.clear();
                     List<CookRequest> list=JSON.parseArray(JSON.parseObject(JSON.parseObject(result).getString("data")).getString("list"),CookRequest.class);
                     for (CookRequest r:list){
                         r.setOrderCount(0);
@@ -378,8 +380,9 @@ public class NoDeskOrder extends AppCompatActivity {
                     }else {
                         if (pn==1){
                             cookAdapter.update(cookList);
+                        }else {
+                            cookAdapter.addMore(cookList);
                         }
-                        cookAdapter.addMore(cookList);
                         Log.d(TAG, "onSuccess: 数据总个数："+cookList.size());
                         Log.d(TAG, "onSuccess: 数据刷新完成！");
                     }
@@ -592,5 +595,15 @@ public class NoDeskOrder extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ActivityCollector.removeActivity(this);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initCookTypeData();
+        initCookData();
+        OrderCount.setText(0+"");
+        priceCount.setText("0.00");
+        OrderCount.setVisibility(View.INVISIBLE);
     }
 }

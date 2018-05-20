@@ -53,9 +53,9 @@ public class LoginActivity extends BaseActivity {
     //登录
     @Event(R.id.button_login)
     private void doLogin(View view){
-        if(!HttpUrl.isNet(LoginActivity.this)){
+       /* if(!HttpUrl.isNet(LoginActivity.this)){
             ViewUtil.showToast(this,"网路异常，请检查你的网路！");
-        }
+        }*/
 
         final String password=edit_Password.getText().toString();
         final String username=edit_UserName.getText().toString();
@@ -68,7 +68,7 @@ public class LoginActivity extends BaseActivity {
             params.addParameter("password",password);
             Log.d("login","进入发送post请求");
             //发送登录请求
-            final Dialog dialog=DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
+            final Dialog dialog=DialogUIUtils.showLoadingHorizontal(this,"登陆中。。。",true).show();
             x.http().post(params, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

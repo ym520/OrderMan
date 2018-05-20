@@ -1,5 +1,6 @@
 package com.colorlife.orderman.Activity.desk;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.colorlife.orderman.R;
 import com.colorlife.orderman.domain.DeskRequest;
 import com.colorlife.orderman.util.ViewUtil;
 import com.colorlife.orderman.util.staticContent.HttpUrl;
+import com.dou361.dialogui.DialogUIUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.ex.HttpException;
@@ -59,7 +61,7 @@ public class AddDesk extends BaseActivity {
             String cookie=sp2.getString("JSESSIONID","");
             requestParams.addHeader("Cookie","JSESSIONID="+cookie);
             requestParams.setBodyContent(JSON.toJSONString(request));
-
+            final Dialog dialog = DialogUIUtils.showLoadingHorizontal(this,"数据加载中。。。",true).show();
             x.http().post(requestParams, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -78,6 +80,7 @@ public class AddDesk extends BaseActivity {
                 }
                 @Override
                 public void onFinished() {
+                    dialog.dismiss();
                     Log.d(TAG, "onFinished: 请求完成！");
                 }
                 @Override
